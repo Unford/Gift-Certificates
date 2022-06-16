@@ -11,28 +11,14 @@ subprojects {
     }
 
     dependencies {
-        implementation group: 'org.springframework', name: 'spring-webmvc', version: '5.3.19'
-        implementation group: 'org.springframework', name: 'spring-context', version: '5.3.19'
-        implementation group: 'org.springframework', name: 'spring-core', version: '5.3.19'
 
         implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.3.Final'
         testImplementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
 
-        implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
-        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2'
-        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
-
         implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.2'
         implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.2'
 
-        testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.4.0'
-        testImplementation group: 'org.springframework', name: 'spring-test', version: '5.3.19'
-
-        testImplementation 'junit:junit:4.11'
-        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-        testImplementation "org.junit.jupiter:junit-jupiter-params:5.7.0"
-        testImplementation 'org.hamcrest:hamcrest:2.2'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     }
 

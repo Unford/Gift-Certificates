@@ -1,19 +1,21 @@
 plugins {
-    id 'war'
+	id 'org.springframework.boot' version '2.7.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
 }
+
+group = 'com.epam.esm'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
 dependencies {
-    implementation project(':core')
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+}
 
-
-    implementation group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-
-    implementation group: 'javax.el', name: 'javax.el-api', version: '3.0.1-b06'
-    implementation group: 'org.glassfish.web', name: 'javax.el', version: '2.2.6'
-
-    testImplementation group: 'com.jayway.jsonpath', name: 'json-path', version: '2.7.0'
-    testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.0'
-
-
+tasks.named('test') {
+	useJUnitPlatform()
 }
