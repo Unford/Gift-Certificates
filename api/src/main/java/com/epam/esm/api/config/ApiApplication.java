@@ -1,9 +1,9 @@
-package com.epam.esm.api;
+package com.epam.esm.api.config;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.epam.esm")
 public class ApiApplication {
 
 	public static void main(String[] args) {

@@ -1,20 +1,32 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
-
-group = 'com.epam.esm'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
 }
-
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly group: 'org.springframework', name: 'spring-web', version: '5.3.20'
+
+    implementation group:'mysql', name:'mysql-connector-java', version: '8.0.28'
+
+    implementation 'org.springframework.boot:spring-boot-starter-aop:2.7.0'
+
+
+
+    testImplementation group: 'com.h2database', name: 'h2', version: '2.1.212'
+
 }
 
 tasks.named('test') {

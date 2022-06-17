@@ -1,6 +1,6 @@
 allprojects {
-    group 'com.epam.esm'
-    version '1.0.0'
+    group = 'com.epam.esm'
+    version = '0.0.1'
 }
 
 subprojects {
@@ -11,9 +11,8 @@ subprojects {
     }
 
     dependencies {
-
-        implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.2.3.Final'
-        testImplementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+        implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
+        implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
 
         implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.2'
         implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.2'
