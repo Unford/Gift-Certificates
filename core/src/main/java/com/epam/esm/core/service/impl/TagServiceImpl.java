@@ -6,6 +6,7 @@ import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.service.BasicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,8 +30,8 @@ public class TagServiceImpl implements BasicService<Tag> {
     }
 
     @Override
-    public Tag create(Tag entity) throws ServiceException{
-        if (tagDao.findByName(entity.getName()).isPresent()){
+    public Tag create(Tag entity) throws ServiceException {
+        if (tagDao.findByName(entity.getName()).isPresent()) {
             throw new ServiceException(entity.getName(), CustomErrorCode.RESOURCE_ALREADY_EXIST);
         }
         return tagDao.create(entity);
@@ -38,13 +39,15 @@ public class TagServiceImpl implements BasicService<Tag> {
 
     @Override
     public List<Tag> findAll() {
-        return tagDao.findAll();
+        // return tagDao.findAll(2, 3).getContent();//todo
+        Page<Tag> tags = tagDao.findAll(2, 3);//todo
+        return tags.getContent();
     }
 
     @Override
     public Tag findById(long id) throws ServiceException {
-        Optional<Tag> result =  tagDao.findById(id);
-        return result.orElseThrow(()-> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
+        Optional<Tag> result = tagDao.findById(id);
+        return result.orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
     }
 
     @Override

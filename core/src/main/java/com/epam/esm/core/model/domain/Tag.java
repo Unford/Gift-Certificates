@@ -1,15 +1,32 @@
 package com.epam.esm.core.model.domain;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * The type Tag.
  */
+@Entity
+@Table(name = "tags")
 public class Tag extends AbstractDaoEntity{
     @NotBlank
     @Size(max = 255, min = 5)
     private String name;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "tags")
+    private Set<GiftCertificate> giftCertificates;
 
     /**
      * Instantiates a new Tag.
@@ -45,6 +62,23 @@ public class Tag extends AbstractDaoEntity{
         this.name = name;
     }
 
+    public Set<GiftCertificate> getGiftCertificates() {
+        return giftCertificates;
+    }
+
+    public void setGiftCertificates(Set<GiftCertificate> giftCertificates) {
+        this.giftCertificates = giftCertificates;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Tag{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,14 +95,5 @@ public class Tag extends AbstractDaoEntity{
         int result = super.hashCode();
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Tag{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 }

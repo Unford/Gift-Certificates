@@ -6,6 +6,7 @@ import com.epam.esm.core.validation.UpdateValidation;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
@@ -20,6 +21,8 @@ import java.util.Set;
  * The type Gift certificate.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity
+@Table(name = "gift_certificates")
 public class GiftCertificate extends AbstractDaoEntity {
     @NotBlank(groups = {CreateValidation.class})
     @NullOrNotBlank(groups = {UpdateValidation.class})
@@ -35,6 +38,11 @@ public class GiftCertificate extends AbstractDaoEntity {
     private LocalDateTime createDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "gift_certificate_has_tag",
+            joinColumns = @JoinColumn(name = "gift_certificate_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private Set<@Valid Tag> tags = new HashSet<>();
 
     /**

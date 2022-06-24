@@ -3,6 +3,7 @@ package com.epam.esm.core.dao.impl;
 
 import com.epam.esm.core.dao.GiftCertificateDao;
 import com.epam.esm.core.model.domain.GiftCertificate;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -28,8 +29,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {//todo jpa
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
-        return new ArrayList<>();
+    public Page<GiftCertificate> findAll(int pageNumber, int pageSize) {
+        return null;//todo
     }
 
     @Override

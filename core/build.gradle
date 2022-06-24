@@ -17,12 +17,14 @@ dependencyManagement {
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    compileOnly 'org.hibernate:hibernate-jpamodelgen:5.6.9.Final'
+    annotationProcessor 'org.hibernate:hibernate-jpamodelgen:5.6.9.Final'
     compileOnly group: 'org.springframework', name: 'spring-web', version: '5.3.20'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
     implementation group:'mysql', name:'mysql-connector-java', version: '8.0.28'
-
-    implementation 'org.springframework.boot:spring-boot-starter-aop:2.7.0'
-
 
 
     testImplementation group: 'com.h2database', name: 'h2', version: '2.1.212'

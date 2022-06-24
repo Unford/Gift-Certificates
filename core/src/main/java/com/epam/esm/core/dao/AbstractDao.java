@@ -1,6 +1,7 @@
 package com.epam.esm.core.dao;
 
 import com.epam.esm.core.model.domain.AbstractDaoEntity;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +28,8 @@ public interface AbstractDao<T extends AbstractDaoEntity> {
      */
     Optional<T> update(T entity);
 
-    /**
-     * Find all list.
-     *
-     * @return the list
-     */
-    List<T> findAll();
+
+    Page<T> findAll(int pageNumber, int pageSize);
 
     /**
      * Find by id optional.

@@ -8,8 +8,9 @@ import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-//import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         this.tagDao = tagDao;
     }
 
-    //@Transactional
+    @Transactional
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate) throws ServiceException {
         GiftCertificate certificate = certificateDao.create(giftCertificate);
@@ -46,7 +47,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> findAll() {
-        return certificateDao.findAll();
+        return certificateDao.findAll(2, 3).getContent();//todo
     }
 
     @Override
@@ -55,7 +56,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    //@Transactional
+    @Transactional
     @Override
     public GiftCertificate update(GiftCertificate entity) throws ServiceException {
         findById(entity.getId());

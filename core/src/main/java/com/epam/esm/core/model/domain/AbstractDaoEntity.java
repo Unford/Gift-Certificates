@@ -1,16 +1,23 @@
 package com.epam.esm.core.model.domain;
 
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Positive;
 
 /**
  * The type Abstract dao entity.
  */
+@MappedSuperclass
 public abstract class AbstractDaoEntity {
     /**
      * The Id.
      */
     @Positive
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     /**
