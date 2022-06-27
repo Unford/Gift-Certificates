@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * The interface Gift certificate dao.
  */
-public interface GiftCertificateDao extends AbstractDao<GiftCertificate> {
+public interface GiftCertificateDao extends BaseGenericDao<GiftCertificate> {
 
     boolean associateCertificateWithTag(long giftCertificateId, long tagId);
 

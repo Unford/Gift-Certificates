@@ -8,7 +8,6 @@ import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +46,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> findAll() {
-        return certificateDao.findAll(2, 3).getContent();//todo
+        return certificateDao.findAll(2, 3);//todo
     }
 
     @Override
@@ -65,9 +64,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public boolean deleteById(long id) throws ServiceException {
+    public void deleteById(long id) throws ServiceException {
         this.findById(id);
-        return certificateDao.deleteById(id);
+        certificateDao.deleteById(id);
     }
 
 

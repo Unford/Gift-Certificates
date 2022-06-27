@@ -1,7 +1,6 @@
 package com.epam.esm.core.service;
 
 import com.epam.esm.core.exception.ServiceException;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -49,8 +48,7 @@ public interface BasicService<T> {
      * Delete by id boolean.
      *
      * @param id the id
-     * @return the boolean
      * @throws ServiceException the service exception
      */
-    boolean deleteById(long id) throws ServiceException;
+    void deleteById(long id) throws ServiceException;
 }

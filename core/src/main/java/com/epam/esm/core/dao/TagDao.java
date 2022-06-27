@@ -5,7 +5,7 @@ import com.epam.esm.core.model.domain.Tag;
 /**
  * The interface Tag dao.
  */
-public interface TagDao extends AbstractDao<Tag> {
+public interface TagDao extends BaseGenericDao<Tag> {
     /**
      * Is any links to tag boolean.
      *

@@ -6,7 +6,6 @@ import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.service.BasicService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,9 +38,8 @@ public class TagServiceImpl implements BasicService<Tag> {
 
     @Override
     public List<Tag> findAll() {
-        // return tagDao.findAll(2, 3).getContent();//todo
-        Page<Tag> tags = tagDao.findAll(2, 3);//todo
-        return tags.getContent();
+        List<Tag> tags = tagDao.findAll(2, 3);//todo
+        return tags;
     }
 
     @Override
@@ -56,11 +54,11 @@ public class TagServiceImpl implements BasicService<Tag> {
     }
 
     @Override
-    public boolean deleteById(long id) throws ServiceException {
+    public void deleteById(long id) throws ServiceException {
         this.findById(id);
         if (tagDao.isAnyLinksToTag(id)) {
             throw new ServiceException(Long.toString(id), CustomErrorCode.FORBIDDEN_OPERATION);
         }
-        return tagDao.deleteById(id);
+       tagDao.deleteById(id);
     }
 }
