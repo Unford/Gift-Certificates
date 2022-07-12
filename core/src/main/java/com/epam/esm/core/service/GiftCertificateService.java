@@ -1,6 +1,7 @@
 package com.epam.esm.core.service;
 
 import com.epam.esm.core.model.domain.GiftCertificate;
+import com.epam.esm.core.model.dto.GiftCertificateRequest;
 
 import java.util.List;
 
@@ -11,11 +12,7 @@ public interface GiftCertificateService extends BasicService<GiftCertificate> {
     /**
      * Find all by parameters list.
      *
-     * @param tag         the tag
-     * @param name        the name
-     * @param description the description
-     * @param sort        the sort
-     * @return the list
+     * @param pageRequest@return the list
      */
-    List<GiftCertificate> findAllByParameters(String tag, String name, String description, String sort);
+    List<GiftCertificate> findAllByParameters(GiftCertificateRequest pageRequest);
 }

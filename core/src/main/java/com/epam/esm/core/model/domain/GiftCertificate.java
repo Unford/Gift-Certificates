@@ -43,7 +43,7 @@ public class GiftCertificate extends AbstractDaoEntity {
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<@Valid Tag> tags = new HashSet<>();
+    private Set<@Valid Tag> tags;
 
     /**
      * Instantiates a new Gift certificate.
@@ -60,6 +60,20 @@ public class GiftCertificate extends AbstractDaoEntity {
         this.lastUpdateDate = builder.lastUpdateDate;
         this.tags = builder.tags;
     }
+
+
+    @PrePersist
+    public void onPrePersist() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createDate = now;
+        this.lastUpdateDate = now;
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        this.lastUpdateDate = LocalDateTime.now();
+    }
+
 
     /**
      * Gets name.

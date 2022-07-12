@@ -1,8 +1,7 @@
 package com.epam.esm.core.dao;
 
 import com.epam.esm.core.model.domain.AbstractDaoEntity;
-
-
+import com.epam.esm.core.model.dto.PageRequest;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements BaseGenericDao<T>{
+    private static final String NAME_COLUMN = "name";
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -36,14 +36,14 @@ public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements Ba
     }
 
     @Override
-    public List<T> findAll(int pageNumber, int pageSize) {
+    public List<T> findAll(PageRequest pageRequest) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
         Root<T> from = criteriaQuery.from(type);
         CriteriaQuery<T> select = criteriaQuery.select(from);
         List<T> entities = entityManager.createQuery(select)
-                .setFirstResult((pageNumber - 1) * pageSize)
-                .setMaxResults(pageSize)
+                .setFirstResult((pageRequest.getPage() - 1) * pageRequest.getSize())
+                .setMaxResults(pageRequest.getSize())
                 .getResultList();
         return entities;
     }
@@ -58,7 +58,7 @@ public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements Ba
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
         Root<T> from = criteriaQuery.from(type);
-        criteriaQuery.select(from).where(criteriaBuilder.equal(from.get("name"), name));//todo name
+        criteriaQuery.select(from).where(criteriaBuilder.equal(from.get(NAME_COLUMN), name));
         return entityManager.createQuery(criteriaQuery)
                 .getResultList()
                 .stream()

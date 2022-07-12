@@ -23,9 +23,4 @@ public class TagDaoImpl extends AbstractBaseDao<Tag> implements TagDao {//todo j
     public Optional<Tag> update(Tag entity) {
         throw new UnsupportedOperationException("Update command is forbidden for tag dao");
     }
-
-    @Override
-    public boolean isAnyLinksToTag(long id) {
-        return !this.findById(id).get().getGiftCertificates().isEmpty();
-    }
 }

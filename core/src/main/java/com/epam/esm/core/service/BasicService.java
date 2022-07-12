@@ -1,6 +1,7 @@
 package com.epam.esm.core.service;
 
 import com.epam.esm.core.exception.ServiceException;
+import com.epam.esm.core.model.dto.PageRequest;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface BasicService<T> {
      *
      * @return the list
      */
-    List<T> findAll();
+    List<T> findAll(PageRequest pageRequest);
 
     /**
      * Find by id t.

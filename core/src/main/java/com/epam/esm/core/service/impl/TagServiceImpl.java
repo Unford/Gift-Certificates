@@ -4,6 +4,7 @@ import com.epam.esm.core.dao.impl.TagDaoImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
+import com.epam.esm.core.model.dto.PageRequest;
 import com.epam.esm.core.service.BasicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,9 +38,8 @@ public class TagServiceImpl implements BasicService<Tag> {
     }
 
     @Override
-    public List<Tag> findAll() {
-        List<Tag> tags = tagDao.findAll(2, 3);//todo
-        return tags;
+    public List<Tag> findAll(PageRequest pageRequest) {
+        return tagDao.findAll(pageRequest);
     }
 
     @Override
@@ -55,9 +55,9 @@ public class TagServiceImpl implements BasicService<Tag> {
 
     @Override
     public void deleteById(long id) throws ServiceException {
-        this.findById(id);
-        if (tagDao.isAnyLinksToTag(id)) {
-            throw new ServiceException(Long.toString(id), CustomErrorCode.FORBIDDEN_OPERATION);
+        Tag tag = this.findById(id);
+        if (!tag.getGiftCertificates().isEmpty()) {
+            throw new ServiceException(Long.toString(id), CustomErrorCode.CONFLICT_DELETE);
         }
        tagDao.deleteById(id);
     }

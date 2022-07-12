@@ -2,16 +2,13 @@ package com.epam.esm.core.model.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -22,6 +19,7 @@ import java.util.Set;
 public class Tag extends AbstractDaoEntity{
     @NotBlank
     @Size(max = 255, min = 5)
+    @Column(unique = true)
     private String name;
 
     @JsonIgnore

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 /**
@@ -18,16 +17,6 @@ import java.util.Optional;
 public class GiftCertificateDaoImpl extends AbstractBaseDao<GiftCertificate> implements GiftCertificateDao {
     public GiftCertificateDaoImpl() {
         super(GiftCertificate.class);
-    }
-
-    @Override
-    public boolean associateCertificateWithTag(long giftCertificateId, long tagId) {
-        return false;
-    }
-
-    @Override
-    public boolean isCertificateAssociatedWithTag(long giftCertificateId, long tagId) {
-        return false;
     }
 
     @Override

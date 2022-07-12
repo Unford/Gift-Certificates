@@ -6,11 +6,15 @@ import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Tag;
+import com.epam.esm.core.model.dto.GiftCertificateRequest;
+import com.epam.esm.core.model.dto.PageRequest;
 import com.epam.esm.core.service.GiftCertificateService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +27,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao certificateDao;
     private final TagDao tagDao;
 
+    private final ModelMapper modelMapper;
+
     /**
      * Instantiates a new Gift certificate service.
      *
@@ -30,23 +36,24 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @param tagDao         the tag dao
      */
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao) {
+    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao, ModelMapper modelMapper) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
     @Override
     public GiftCertificate create(GiftCertificate giftCertificate) throws ServiceException {
+        prepareGiftCertificateTags(giftCertificate);
         GiftCertificate certificate = certificateDao.create(giftCertificate);
-        linkAllTagsToCertificate(certificate.getId(), certificate.getTags());
         return certificate;
 
     }
 
     @Override
-    public List<GiftCertificate> findAll() {
-        return certificateDao.findAll(2, 3);//todo
+    public List<GiftCertificate> findAll(PageRequest pageRequest) {
+        return certificateDao.findAll(pageRequest);
     }
 
     @Override
@@ -55,12 +62,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    @Transactional
+
     @Override
+    @Transactional
     public GiftCertificate update(GiftCertificate entity) throws ServiceException {
-        findById(entity.getId());
-        linkAllTagsToCertificate(entity.getId(), entity.getTags());
-        return certificateDao.update(entity).get();
+        GiftCertificate giftCertificate = findById(entity.getId());
+        if (entity.getTags() != null) {
+            prepareGiftCertificateTags(entity);
+        }
+        modelMapper.map(entity, giftCertificate);
+
+        return certificateDao.update(giftCertificate).get();
     }
 
     @Override
@@ -71,26 +83,22 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
     @Override
-    public List<GiftCertificate> findAllByParameters(String tag, String name, String description, String sort) {
-        if (tag == null && name == null && description == null && sort == null) {
-            return this.findAll();
-        }
-        return certificateDao.findAllByParameters(tag, name, description, sort);
+    public List<GiftCertificate> findAllByParameters(GiftCertificateRequest pageRequest) {
+        return this.findAll(pageRequest);//todo
     }
 
-    private void linkAllTagsToCertificate(long certificateId, Set<Tag> tagSet){
-        for (Tag tag : tagSet) {
+    private GiftCertificate prepareGiftCertificateTags(GiftCertificate giftCertificate) {
+        Set<Tag> tags = new HashSet<>();
+        for (Tag tag : giftCertificate.getTags()) {
             String name = tag.getName();
             Optional<Tag> optionalTag = tagDao.findByName(name);
-            if (!optionalTag.isPresent()) {
-                tagDao.create(tag);
-            } else {
-                tag.setId(optionalTag.get().getId());
-            }
-            if (!certificateDao.isCertificateAssociatedWithTag(certificateId, tag.getId())){
-                certificateDao.associateCertificateWithTag(certificateId, tag.getId());
-            }
+            tags.add(optionalTag.orElseGet(() -> {
+                tag.setId(null);
+                return tag;
+            }));
         }
+        giftCertificate.setTags(tags);
+        return giftCertificate;
     }
 
 }

@@ -8,12 +8,6 @@ import java.util.List;
  * The interface Gift certificate dao.
  */
 public interface GiftCertificateDao extends BaseGenericDao<GiftCertificate> {
-
-    boolean associateCertificateWithTag(long giftCertificateId, long tagId);
-
-
-    boolean isCertificateAssociatedWithTag(long giftCertificateId, long tagId);
-
     /**
      * Find all by parameters list.
      *

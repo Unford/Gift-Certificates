@@ -1,6 +1,7 @@
 package com.epam.esm.core.dao;
 
 import com.epam.esm.core.model.domain.AbstractDaoEntity;
+import com.epam.esm.core.model.dto.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public interface BaseGenericDao<T extends AbstractDaoEntity> {
     Optional<T> update(T entity);
 
 
-    List<T> findAll(int pageNumber, int pageSize);
+    List<T> findAll(PageRequest pageRequest);
 
     /**
      * Find by id optional.

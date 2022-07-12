@@ -3,6 +3,8 @@ package com.epam.esm.api.exception;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.dto.ErrorInfo;
+import org.hibernate.validator.internal.engine.path.NodeImpl;
+import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,6 +32,7 @@ import java.util.stream.Collectors;
  */
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+    private final static String CONSTRAINT_VIOLATION_MESSAGE_PATTERN = "[%s]:'%s' %s";
     private final MessageSource messageSource;
 
     /**
@@ -134,7 +138,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         CustomErrorCode errorCode = CustomErrorCode.CONSTRAINT_VIOLATION;
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         String message = constraintViolations.stream()
-                .map(cv -> cv == null ? "[null]" : "[" + cv.getInvalidValue() + "]: " + cv.getMessage())
+                .map(cv -> {
+                    NodeImpl leafNode = ((PathImpl) cv.getPropertyPath()).getLeafNode();
+                    String fieldName = leafNode.getParent().getValue() instanceof Collection ?
+                            leafNode.getParent().getName() : leafNode.getName();
+                    return String.format(CONSTRAINT_VIOLATION_MESSAGE_PATTERN,
+                            fieldName, cv.getInvalidValue(), cv.getMessage());
+                })
                 .collect(Collectors.joining("; "));
         ErrorInfo errorInfo = new ErrorInfo(errorCode.getCode(), message);
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());

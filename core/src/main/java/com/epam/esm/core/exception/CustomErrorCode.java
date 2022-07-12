@@ -29,7 +29,7 @@ public enum CustomErrorCode {
     /**
      * Forbidden operation custom error code.
      */
-    FORBIDDEN_OPERATION(40300, "exception.forbidden.operation.message", HttpStatus.FORBIDDEN),
+    CONFLICT_DELETE(40300, "exception.conflict.delete.operation.message", HttpStatus.CONFLICT),
     /**
      * Resource already exist custom error code.
      */
