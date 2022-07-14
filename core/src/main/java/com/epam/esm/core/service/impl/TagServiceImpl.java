@@ -4,8 +4,9 @@ import com.epam.esm.core.dao.impl.TagDaoImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
-import com.epam.esm.core.model.dto.PageRequest;
+import com.epam.esm.core.model.dto.PageRequestParameters;
 import com.epam.esm.core.service.BasicService;
+import com.epam.esm.core.util.RequestParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +39,8 @@ public class TagServiceImpl implements BasicService<Tag> {
     }
 
     @Override
-    public List<Tag> findAll(PageRequest pageRequest) {
-        return tagDao.findAll(pageRequest);
+    public List<Tag> findAll(PageRequestParameters pageRequestParameters) {
+        return tagDao.findAll(RequestParser.convertToPageable(pageRequestParameters));
     }
 
     @Override

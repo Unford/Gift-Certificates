@@ -17,5 +17,6 @@ public interface GiftCertificateDao extends BaseGenericDao<GiftCertificate> {
      * @param sort        the sort
      * @return the list
      */
+    //todo empty
     List<GiftCertificate> findAllByParameters(String tag, String name, String description, String sort);
 }

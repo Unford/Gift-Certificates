@@ -60,30 +60,6 @@ public class GiftCertificateController {
         return ResponseEntity.created(location).body(giftCertificate);
     }
 
-    /**
-     * Gets all gift certificates.
-     *
-     * @param tag         the tag
-     * @param name        the name
-     * @param description the description
-     * @param sort        the sort
-     * @return the all gift certificates
-     */
-//    @GetMapping
-//    public List<GiftCertificate> getAllGiftCertificates(@Size(min = 5, max = 255) @NullOrNotBlank
-//                                                        @RequestParam(name = "tag", required = false)
-//                                                                String tag,
-//                                                        @Size(min = 5, max = 255) @NullOrNotBlank
-//                                                        @RequestParam(name = "name", required = false)
-//                                                                String name,
-//                                                        @Size(min = 5, max = 255) @NullOrNotBlank
-//                                                        @RequestParam(name = "description", required = false)
-//                                                                String description,
-//                                                        @Pattern(regexp = "^(?:-?date|-?name|-?name, -?date|-?date, -?name)$")
-//                                                        @RequestParam(name = "sort", required = false) String sort) {
-//        return service.findAllByParameters(tag, name, description, sort);
-//    }
-
     @GetMapping
     public List<GiftCertificate> getGiftCertificates(@Valid GiftCertificateRequest giftCertificateRequest,
                                                      BindingResult result) {

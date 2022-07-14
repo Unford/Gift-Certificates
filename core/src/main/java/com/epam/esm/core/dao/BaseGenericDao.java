@@ -1,7 +1,8 @@
 package com.epam.esm.core.dao;
 
 import com.epam.esm.core.model.domain.AbstractDaoEntity;
-import com.epam.esm.core.model.dto.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +30,8 @@ public interface BaseGenericDao<T extends AbstractDaoEntity> {
     Optional<T> update(T entity);
 
 
-    List<T> findAll(PageRequest pageRequest);
-
+    List<T> findAll(Pageable pageable);
+    List<T> findAll(Specification<T> specification, Pageable pageable);
     /**
      * Find by id optional.
      *

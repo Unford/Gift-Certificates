@@ -2,7 +2,7 @@ package com.epam.esm.api.controller;
 
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
-import com.epam.esm.core.model.dto.PageRequest;
+import com.epam.esm.core.model.dto.PageRequestParameters;
 import com.epam.esm.core.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,8 +54,8 @@ public class TagController {
      * @return the all tags
      */
     @GetMapping
-    public List<Tag> getTags(@Valid PageRequest pageRequest, BindingResult bindingResult) {
-        return service.findAll(pageRequest);
+    public List<Tag> getTags(@Valid PageRequestParameters pageRequestParameters, BindingResult bindingResult) {
+        return service.findAll(pageRequestParameters);
     }
 
     /**

@@ -7,10 +7,12 @@ import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.model.dto.GiftCertificateRequest;
-import com.epam.esm.core.model.dto.PageRequest;
+import com.epam.esm.core.model.dto.PageRequestParameters;
 import com.epam.esm.core.service.GiftCertificateService;
+import com.epam.esm.core.util.RequestParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +54,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificate> findAll(PageRequest pageRequest) {
-        return certificateDao.findAll(pageRequest);
+    public List<GiftCertificate> findAll(PageRequestParameters pageRequestParameters) {
+        return certificateDao.findAll(RequestParser.convertToPageable(pageRequestParameters));
     }
 
     @Override
@@ -84,7 +86,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificate> findAllByParameters(GiftCertificateRequest pageRequest) {
-        return this.findAll(pageRequest);//todo
+        Specification<GiftCertificate> specification = RequestParser.parseSpecification(pageRequest);
+        return certificateDao.findAll(specification, RequestParser.convertToPageable(pageRequest));
     }
 
     private GiftCertificate prepareGiftCertificateTags(GiftCertificate giftCertificate) {

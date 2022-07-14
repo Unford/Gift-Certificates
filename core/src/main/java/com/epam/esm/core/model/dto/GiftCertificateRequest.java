@@ -1,20 +1,14 @@
 package com.epam.esm.core.model.dto;
 
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 
-public class GiftCertificateRequest extends PageRequest {
+public class GiftCertificateRequest extends PageRequestParameters {
     private List<@Size(min = 5, max = 255) @NotBlank String> tag;
     private List<@Size(min = 5, max = 255) @NotBlank String> name;
     private List<@Size(min = 5, max = 255) @NotBlank String> description;
-    @Pattern(regexp = "^(?:-?date|-?name|-?name, -?date|-?date, -?name)$")
-    private String sort;
-
-
     public List<String> getTag() {
         return tag;
     }
@@ -39,11 +33,10 @@ public class GiftCertificateRequest extends PageRequest {
         this.description = description;
     }
 
+    @Override
+    @Pattern(regexp = "^(?:-?date|-?name|-?name, -?date|-?date, -?name)$")
     public String getSort() {
-        return sort;
+        return super.getSort();
     }
 
-    public void setSort(String sort) {
-        this.sort = sort;
-    }
 }
