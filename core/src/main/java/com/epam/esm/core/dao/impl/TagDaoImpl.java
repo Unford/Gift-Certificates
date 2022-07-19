@@ -11,7 +11,7 @@ import java.util.Optional;
  * The type Tag dao.
  */
 @Repository
-public class TagDaoImpl extends AbstractBaseDao<Tag> implements TagDao {//todo jpa
+public class TagDaoImpl extends AbstractBaseDao<Tag> implements TagDao {
 
 
 

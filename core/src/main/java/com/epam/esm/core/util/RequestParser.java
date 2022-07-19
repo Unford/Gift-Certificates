@@ -1,6 +1,7 @@
 package com.epam.esm.core.util;
 
 import com.epam.esm.core.dao.specification.DaoSpecification;
+import com.epam.esm.core.dao.specification.JoinedDaoSpecification;
 import com.epam.esm.core.dao.specification.SearchCriteria;
 import com.epam.esm.core.dao.specification.SearchOperation;
 import com.epam.esm.core.model.domain.GiftCertificate;
@@ -15,7 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.*;
 
 public class RequestParser {
-    private static final String SORT_DELIMITER_REGEX = ",\\s*";
+    private static final String DELIMITER_REGEX = ",\\s*";
     private static final String RHS_COLON_DELIMITER = ":";
     private static final String NEGATION_SIGN = "!";
     private static final String MINUS = "-";
@@ -30,7 +31,7 @@ public class RequestParser {
         Sort sort = Sort.unsorted();
         if (sortQuery != null && !sortQuery.isEmpty()) {
             List<Sort.Order> orders = new ArrayList<>();
-            Arrays.stream(sortQuery.split(SORT_DELIMITER_REGEX)).forEach((s -> {
+            Arrays.stream(sortQuery.split(DELIMITER_REGEX)).forEach((s -> {
                 Sort.Direction direction = s.startsWith(MINUS) ? Sort.Direction.DESC : Sort.Direction.ASC;
                 if (s.matches(SORT_PROPERTY_DIRECTION_REGEX)) {
                     s = s.substring(1);
@@ -44,38 +45,57 @@ public class RequestParser {
 
     public static Specification<GiftCertificate> parseSpecification(GiftCertificateRequest pageRequest) {
         List<SearchCriteria> criteriaList = new ArrayList<>();
-        List<String> names = pageRequest.getName();
-        parseQueryList(criteriaList, names, GiftCertificate_.NAME);
-        List<String> descriptions = pageRequest.getDescription();
-        parseQueryList(criteriaList, descriptions, GiftCertificate_.DESCRIPTION);
-        List<String> tags = pageRequest.getTag();
-        parseQueryList(criteriaList, tags, Tag_.NAME, Collections.singletonList(GiftCertificate_.TAGS));
+        criteriaList.addAll(parseQueryList(pageRequest.getName(), GiftCertificate_.NAME));
+        criteriaList.addAll(parseQueryList(pageRequest.getDescription(), GiftCertificate_.DESCRIPTION));
 
-        return new DaoSpecification<>(criteriaList);
+        Optional<SearchCriteria> tagCriteria = parseSingleQuery(pageRequest.getTag(), Tag_.NAME);
+
+        Specification<GiftCertificate> fieldsSpecification = new DaoSpecification<>(criteriaList);
+        Specification<GiftCertificate> tagsSpecification = parseTagsSpecification(tagCriteria.orElse(null));
+
+
+        return fieldsSpecification.and(tagsSpecification);
     }
 
-    private static void parseQueryList(List<SearchCriteria> criteriaList,
-                                       List<String> queries, String key, List<String> joins) {
+    private static List<SearchCriteria> parseQueryList(List<String> queries, String key) {
+        List<SearchCriteria> criteriaList = new ArrayList<>();
         if (queries != null && !queries.isEmpty()) {
-            queries.forEach(s -> {
-                SearchCriteria searchCriteria = RequestParser.parseSingleQuery(s, key);
-                searchCriteria.setJoinTables(joins);
-                criteriaList.add(searchCriteria);
-            });
+            queries.forEach(s -> RequestParser.parseSingleQuery(s, key).ifPresent(criteriaList::add));
         }
+        return criteriaList;
     }
 
-    private static void parseQueryList(List<SearchCriteria> criteriaList,
-                                       List<String> queries, String key) {
-        parseQueryList(criteriaList, queries, key, Collections.emptyList());
+    private static Specification<GiftCertificate> parseTagsSpecification(SearchCriteria searchCriteria) {
+        Specification<GiftCertificate> specification = null;
+        if (searchCriteria != null) {
+            if (searchCriteria.getOperation() == SearchOperation.IN) {
+                String[] values = searchCriteria.getValue().toString().split(DELIMITER_REGEX);
+                specification = searchCriteria.isNot() ? JoinedDaoSpecification.notInTags(values) :
+                        JoinedDaoSpecification.inTags(values);
+            } else {
+                specification = new JoinedDaoSpecification<>(Collections.singletonList(searchCriteria),
+                        GiftCertificate_.TAGS);
+            }
+        }
+        return specification;
     }
 
-    private static SearchCriteria parseSingleQuery(String query, String key) {
-        String[] strings = query.split(RHS_COLON_DELIMITER, 2);
-        boolean isNot = strings[0].startsWith(NEGATION_SIGN);
-        SearchCriteria searchCriteria = new SearchCriteria(key, strings[1],
-                SearchOperation.parseOperation(isNot ? strings[0].substring(1) : strings[0])
-                        .orElse(SearchOperation.EQUAL), isNot);
-        return searchCriteria;
+    private static Optional<SearchCriteria> parseSingleQuery(String query, String key) {
+        Optional<SearchCriteria> result = Optional.empty();
+        if (query != null && !query.isEmpty()) {
+            String[] strings = query.split(RHS_COLON_DELIMITER, 2);
+            String operation = strings[0];
+            String value = strings[0];
+            SearchOperation searchOperation = SearchOperation.EQUAL;
+
+            boolean isNot = operation.startsWith(NEGATION_SIGN);
+            if (strings.length >= 2) {
+                value = strings[1];
+                searchOperation = SearchOperation.parseOperation(isNot ? operation.substring(1)
+                        : operation).orElse(SearchOperation.EQUAL);
+            }
+            result = Optional.of(new SearchCriteria(key, value, searchOperation, isNot));
+        }
+        return result;
     }
 }

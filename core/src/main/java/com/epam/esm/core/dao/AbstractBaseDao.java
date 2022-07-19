@@ -1,6 +1,7 @@
 package com.epam.esm.core.dao;
 
 import com.epam.esm.core.model.domain.AbstractDaoEntity;
+import com.epam.esm.core.model.domain.AbstractDaoEntity_;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements BaseGenericDao<T> {
-    private final static String NAME_COLUMN = "name";
+    private static final String NAME_COLUMN = "name";
     @PersistenceContext
     protected EntityManager entityManager;
 
@@ -47,10 +48,12 @@ public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements Ba
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
         Root<T> from = criteriaQuery.from(type);
         CriteriaQuery<T> select = criteriaQuery.select(from);
+
         Predicate predicate = specification.toPredicate(from, criteriaQuery, criteriaBuilder);
         if (predicate != null && !predicate.getExpressions().isEmpty()) {
-            select.where(predicate);
+            select.where(predicate).groupBy(from.get(AbstractDaoEntity_.ID));
         }
+
         Sort sort = pageable.getSort();
         if (!sort.isEmpty()) {
             List<Order> orderList = new ArrayList<>();
@@ -65,6 +68,7 @@ public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements Ba
                 .getResultList();
         return entities;
     }
+
 
     @Override
     public Optional<T> findById(long id) {
@@ -87,7 +91,8 @@ public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements Ba
     @Transactional
     public void deleteById(long id) {
         entityManager.remove(findById(id).get());
-
     }
+
+
 
 }

@@ -9,7 +9,8 @@ public enum SearchOperation {
     GREATER_THAN_EQUAL("gte"),
     LESS_THAN_EQUAL("lte"),
     EQUAL("eq"),
-    LIKE("lk");
+    LIKE("lk"),
+    IN("in");
 
     private final String operation;
 

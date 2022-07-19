@@ -1,23 +1,20 @@
 package com.epam.esm.core.dao.specification;
 
-import java.util.List;
 
 public class SearchCriteria {
     private String key;
-    private String value;
+    private Object value;
     private SearchOperation operation;
     private boolean isNot;
 
-    private List<String> joinTables;
 
-
-    public SearchCriteria(String key, String value, SearchOperation operation) {
+    public SearchCriteria(String key, Object value, SearchOperation operation) {
         this.key = key;
         this.value = value;
         this.operation = operation;
     }
 
-    public SearchCriteria(String key, String value, SearchOperation operation, boolean isNot) {
+    public SearchCriteria(String key, Object value, SearchOperation operation, boolean isNot) {
         this.key = key;
         this.value = value;
         this.operation = operation;
@@ -32,11 +29,11 @@ public class SearchCriteria {
         this.key = key;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Object value) {
         this.value = value;
     }
 
@@ -56,13 +53,6 @@ public class SearchCriteria {
         isNot = not;
     }
 
-    public List<String> getJoinTables() {
-        return joinTables;
-    }
-
-    public void setJoinTables(List<String> joinTables) {
-        this.joinTables = joinTables;
-    }
 
     @Override
     public String toString() {

@@ -2,10 +2,17 @@ package com.epam.esm.core.service.impl;
 
 import com.epam.esm.core.dao.GiftCertificateDao;
 import com.epam.esm.core.dao.TagDao;
+import com.epam.esm.core.dao.impl.GiftCertificateDaoImpl;
+import com.epam.esm.core.dao.specification.DaoSpecification;
+import com.epam.esm.core.dao.specification.JoinedDaoSpecification;
+import com.epam.esm.core.dao.specification.SearchCriteria;
+import com.epam.esm.core.dao.specification.SearchOperation;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
+import com.epam.esm.core.model.domain.GiftCertificate_;
 import com.epam.esm.core.model.domain.Tag;
+import com.epam.esm.core.model.domain.Tag_;
 import com.epam.esm.core.model.dto.GiftCertificateRequest;
 import com.epam.esm.core.model.dto.PageRequestParameters;
 import com.epam.esm.core.service.GiftCertificateService;
@@ -16,17 +23,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The type Gift certificate service.
  */
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
-    private final GiftCertificateDao certificateDao;
+    private final GiftCertificateDaoImpl certificateDao;
     private final TagDao tagDao;
 
     private final ModelMapper modelMapper;
@@ -38,7 +42,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
      * @param tagDao         the tag dao
      */
     @Autowired
-    public GiftCertificateServiceImpl(GiftCertificateDao certificateDao, TagDao tagDao, ModelMapper modelMapper) {
+    public GiftCertificateServiceImpl(GiftCertificateDaoImpl certificateDao, TagDao tagDao, ModelMapper modelMapper) {
         this.certificateDao = certificateDao;
         this.tagDao = tagDao;
         this.modelMapper = modelMapper;

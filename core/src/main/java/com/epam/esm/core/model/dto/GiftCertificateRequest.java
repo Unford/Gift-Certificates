@@ -1,19 +1,26 @@
 package com.epam.esm.core.model.dto;
 
 
+import com.epam.esm.core.dao.specification.SearchOperation;
+import com.epam.esm.core.validation.NullOrNotBlank;
+
 import javax.validation.constraints.*;
 import java.util.List;
 
 
 public class GiftCertificateRequest extends PageRequestParameters {
-    private List<@Size(min = 5, max = 255) @NotBlank String> tag;
-    private List<@Size(min = 5, max = 255) @NotBlank String> name;
-    private List<@Size(min = 5, max = 255) @NotBlank String> description;
-    public List<String> getTag() {
+    private @Pattern(regexp = "^((!?in)|(eq)|(lk)):[^:]+") @Size(min = 5, max = 255)
+    @NullOrNotBlank String tag;
+    private List<@Pattern(regexp = "^!?((in)|(eq)|(lk)):[^:,]+") @Size(min = 5, max = 255)
+    @NotBlank String> name;
+    private List<@Pattern(regexp = "^!?((in)|(eq)|(lk)):[^:,]+") @Size(min = 5, max = 255)
+    @NotBlank String> description;
+
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(List<String> tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
