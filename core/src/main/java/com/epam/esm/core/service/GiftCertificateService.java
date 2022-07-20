@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * The interface Gift certificate service.
  */
-public interface GiftCertificateService extends BasicService<GiftCertificate> {
+public interface GiftCertificateService extends BaseService<GiftCertificate> {
     /**
      * Find all by parameters list.
      *

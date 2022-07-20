@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @param <T> the type parameter
  */
-public interface BasicService<T> {
+public interface BaseService<T> {
     /**
      * Create t.
      *

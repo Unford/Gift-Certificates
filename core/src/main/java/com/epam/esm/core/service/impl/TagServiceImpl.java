@@ -1,11 +1,11 @@
 package com.epam.esm.core.service.impl;
 
-import com.epam.esm.core.dao.impl.TagDaoImpl;
+import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.model.dto.PageRequestParameters;
-import com.epam.esm.core.service.BasicService;
+import com.epam.esm.core.service.BaseService;
 import com.epam.esm.core.util.RequestParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,42 +17,38 @@ import java.util.Optional;
  * The type Tag service.
  */
 @Service
-public class TagServiceImpl implements BasicService<Tag> {
-    private final TagDaoImpl tagDao;
+public class TagServiceImpl implements BaseService<Tag> {
+    private final TagRepositoryImpl tagRepository;
 
     /**
      * Instantiates a new Tag service.
      *
-     * @param tagDao the tag dao
+     * @param tagRepository the tag dao
      */
     @Autowired
-    public TagServiceImpl(TagDaoImpl tagDao) {
-        this.tagDao = tagDao;
+    public TagServiceImpl(TagRepositoryImpl tagRepository) {
+        this.tagRepository = tagRepository;
     }
 
     @Override
     public Tag create(Tag entity) throws ServiceException {
-        if (tagDao.findByName(entity.getName()).isPresent()) {
+        if (tagRepository.findByName(entity.getName()).isPresent()) {
             throw new ServiceException(entity.getName(), CustomErrorCode.RESOURCE_ALREADY_EXIST);
         }
-        return tagDao.create(entity);
+        return tagRepository.create(entity);
     }
 
     @Override
     public List<Tag> findAll(PageRequestParameters pageRequestParameters) {
-        return tagDao.findAll(RequestParser.convertToPageable(pageRequestParameters));
+        return tagRepository.findAll(RequestParser.convertToPageable(pageRequestParameters));
     }
 
     @Override
     public Tag findById(long id) throws ServiceException {
-        Optional<Tag> result = tagDao.findById(id);
+        Optional<Tag> result = tagRepository.findById(id);
         return result.orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    @Override
-    public Tag update(Tag entity) {
-        throw new UnsupportedOperationException("Update command is forbidden for tag service");
-    }
 
     @Override
     public void deleteById(long id) throws ServiceException {
@@ -60,6 +56,11 @@ public class TagServiceImpl implements BasicService<Tag> {
         if (!tag.getGiftCertificates().isEmpty()) {
             throw new ServiceException(Long.toString(id), CustomErrorCode.CONFLICT_DELETE);
         }
-       tagDao.deleteById(id);
+        tagRepository.deleteById(id);
+    }
+
+    @Override
+    public Tag update(Tag entity) {
+        throw new UnsupportedOperationException("Update command is forbidden for tag service");
     }
 }

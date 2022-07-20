@@ -1,4 +1,4 @@
-package com.epam.esm.core.dao.specification;
+package com.epam.esm.core.repository.specification;
 
 import com.epam.esm.core.model.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -7,10 +7,10 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinedDaoSpecification<T extends AbstractDaoEntity> extends DaoSpecification<T> {
+public class JoinedRepositorySpecification<T extends AbstractDaoEntity> extends RepositorySpecification<T> {
     private final String joinTable;
 
-    public JoinedDaoSpecification(List<SearchCriteria> criteriaList, String joinTable) {
+    public JoinedRepositorySpecification(List<SearchCriteria> criteriaList, String joinTable) {
         super(criteriaList);
         this.joinTable = joinTable;
     }

@@ -1,13 +1,30 @@
 package com.epam.esm.core.model.domain;
 
 
-import javax.persistence.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User extends AbstractDaoEntity {
+    @NotBlank
+    @Size(max = 255, min = 5)
     private String name;
+    @NotBlank
+    @Size(max = 255, min = 5)
+    @Column(unique = true)
     private String login;
+    @JsonIgnore
+    @NotBlank
+    @Size(max = 255, min = 5)
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
 
     public String getName() {
         return name;
@@ -31,6 +48,14 @@ public class User extends AbstractDaoEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     @Override

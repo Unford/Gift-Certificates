@@ -1,9 +1,9 @@
 package com.epam.esm.core.util;
 
-import com.epam.esm.core.dao.specification.DaoSpecification;
-import com.epam.esm.core.dao.specification.JoinedDaoSpecification;
-import com.epam.esm.core.dao.specification.SearchCriteria;
-import com.epam.esm.core.dao.specification.SearchOperation;
+import com.epam.esm.core.repository.specification.RepositorySpecification;
+import com.epam.esm.core.repository.specification.JoinedRepositorySpecification;
+import com.epam.esm.core.repository.specification.SearchCriteria;
+import com.epam.esm.core.repository.specification.SearchOperation;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.GiftCertificate_;
 import com.epam.esm.core.model.domain.Tag_;
@@ -50,7 +50,7 @@ public class RequestParser {
 
         Optional<SearchCriteria> tagCriteria = parseSingleQuery(pageRequest.getTag(), Tag_.NAME);
 
-        Specification<GiftCertificate> fieldsSpecification = new DaoSpecification<>(criteriaList);
+        Specification<GiftCertificate> fieldsSpecification = new RepositorySpecification<>(criteriaList);
         Specification<GiftCertificate> tagsSpecification = parseTagsSpecification(tagCriteria.orElse(null));
 
 
@@ -70,10 +70,10 @@ public class RequestParser {
         if (searchCriteria != null) {
             if (searchCriteria.getOperation() == SearchOperation.IN) {
                 String[] values = searchCriteria.getValue().toString().split(DELIMITER_REGEX);
-                specification = searchCriteria.isNot() ? JoinedDaoSpecification.notInTags(values) :
-                        JoinedDaoSpecification.inTags(values);
+                specification = searchCriteria.isNot() ? JoinedRepositorySpecification.notInTags(values) :
+                        JoinedRepositorySpecification.inTags(values);
             } else {
-                specification = new JoinedDaoSpecification<>(Collections.singletonList(searchCriteria),
+                specification = new JoinedRepositorySpecification<>(Collections.singletonList(searchCriteria),
                         GiftCertificate_.TAGS);
             }
         }

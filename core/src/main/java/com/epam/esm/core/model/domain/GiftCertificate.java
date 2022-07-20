@@ -45,6 +45,9 @@ public class GiftCertificate extends AbstractDaoEntity {
     )
     private Set<@Valid Tag> tags;
 
+    @ManyToMany(mappedBy = "giftCertificates")
+    private Set<Order> orders;
+
     /**
      * Instantiates a new Gift certificate.
      */

@@ -1,4 +1,4 @@
-package com.epam.esm.core.dao.specification;
+package com.epam.esm.core.repository.specification;
 
 
 public class SearchCriteria {

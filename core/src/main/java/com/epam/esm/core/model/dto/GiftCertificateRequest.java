@@ -1,7 +1,6 @@
 package com.epam.esm.core.model.dto;
 
 
-import com.epam.esm.core.dao.specification.SearchOperation;
 import com.epam.esm.core.validation.NullOrNotBlank;
 
 import javax.validation.constraints.*;

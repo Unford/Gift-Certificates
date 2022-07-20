@@ -1,4 +1,4 @@
-package com.epam.esm.core.dao;
+package com.epam.esm.core.repository;
 
 import com.epam.esm.core.model.domain.AbstractDaoEntity;
 import com.epam.esm.core.model.domain.AbstractDaoEntity_;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractBaseDao<T extends AbstractDaoEntity> implements BaseGenericDao<T> {
+public abstract class AbstractBaseRepository<T extends AbstractDaoEntity> implements BaseGenericRepository<T> {
     private static final String NAME_COLUMN = "name";
     @PersistenceContext
     protected EntityManager entityManager;
 
     private final Class<T> type;
 
-    protected AbstractBaseDao(Class<T> type) {
+    protected AbstractBaseRepository(Class<T> type) {
         this.type = type;
     }
 

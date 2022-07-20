@@ -1,4 +1,4 @@
-package com.epam.esm.core.dao.specification;
+package com.epam.esm.core.repository.specification;
 
 import java.util.Arrays;
 import java.util.Optional;
