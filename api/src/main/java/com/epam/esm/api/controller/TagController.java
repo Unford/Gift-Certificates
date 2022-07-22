@@ -2,7 +2,8 @@ package com.epam.esm.api.controller;
 
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
-import com.epam.esm.core.model.dto.PageRequestParameters;
+import com.epam.esm.core.model.dto.TagDto;
+import com.epam.esm.core.model.dto.request.PageRequestParameters;
 import com.epam.esm.core.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,7 +45,7 @@ public class TagController {
      * @throws ServiceException the service exception
      */
     @GetMapping("/{id}")
-    public Tag getTagById(@PathVariable("id") @Positive long id) throws ServiceException {
+    public TagDto getTagById(@PathVariable("id") @Positive long id) throws ServiceException {
         return service.findById(id);
     }
 
@@ -54,7 +55,7 @@ public class TagController {
      * @return the all tags
      */
     @GetMapping
-    public List<Tag> getTags(@Valid PageRequestParameters pageRequestParameters, BindingResult bindingResult) {
+    public List<TagDto> getTags(@Valid PageRequestParameters pageRequestParameters, BindingResult bindingResult) {
         return service.findAll(pageRequestParameters);
     }
 
@@ -66,7 +67,7 @@ public class TagController {
      * @throws ServiceException the service exception
      */
     @PostMapping
-    public ResponseEntity<Tag> createTag(@RequestBody @Valid Tag tag) throws ServiceException {
+    public ResponseEntity<TagDto> createTag(@RequestBody @Valid TagDto tag) throws ServiceException {
         service.create(tag);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

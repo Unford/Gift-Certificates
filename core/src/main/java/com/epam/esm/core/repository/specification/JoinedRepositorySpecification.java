@@ -1,13 +1,14 @@
 package com.epam.esm.core.repository.specification;
 
 import com.epam.esm.core.model.domain.*;
+import com.epam.esm.core.model.domain.Order;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JoinedRepositorySpecification<T extends AbstractDaoEntity> extends RepositorySpecification<T> {
+public class JoinedRepositorySpecification<T extends AbstractRepositoryEntity> extends RepositorySpecification<T> {
     private final String joinTable;
 
     public JoinedRepositorySpecification(List<SearchCriteria> criteriaList, String joinTable) {
@@ -26,26 +27,5 @@ public class JoinedRepositorySpecification<T extends AbstractDaoEntity> extends 
             }
         });
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-    }
-
-    public static Specification<GiftCertificate> inTags(String... tags) {
-        return (root, query, builder) -> {
-            Join<GiftCertificate, Tag> join = root.join(GiftCertificate_.tags);
-            query.groupBy(root.get(GiftCertificate_.id))
-                    .having(builder.greaterThanOrEqualTo(builder.count(root.get(GiftCertificate_.id)),
-                            Long.valueOf(tags.length)));
-            return join.get(Tag_.name).in((Object[]) tags);
-        };
-    }
-
-    public static Specification<GiftCertificate> notInTags(String... tags) {
-        return (root, query, builder) -> {
-            Join<GiftCertificate, Tag> join = root.join(GiftCertificate_.tags, JoinType.LEFT);
-            query.groupBy(root.get(GiftCertificate_.id))
-                    .having(builder.greaterThanOrEqualTo(builder.count(root.get(GiftCertificate_.id)),
-                            builder.size(root.get(GiftCertificate_.tags)).as(Long.class)));
-            return builder.or(builder.not(join.get(Tag_.name).in((Object[]) tags)),
-                    builder.isEmpty(root.get(GiftCertificate_.tags)));
-        };
     }
 }

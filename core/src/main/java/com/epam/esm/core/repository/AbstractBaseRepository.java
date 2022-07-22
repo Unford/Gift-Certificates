@@ -1,7 +1,7 @@
 package com.epam.esm.core.repository;
 
-import com.epam.esm.core.model.domain.AbstractDaoEntity;
-import com.epam.esm.core.model.domain.AbstractDaoEntity_;
+import com.epam.esm.core.model.domain.AbstractRepositoryEntity;
+import com.epam.esm.core.model.domain.AbstractRepositoryEntity_;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,12 +9,11 @@ import org.springframework.data.jpa.domain.Specification;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractBaseRepository<T extends AbstractDaoEntity> implements BaseGenericRepository<T> {
+public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity> implements BaseGenericRepository<T> {
     private static final String NAME_COLUMN = "name";
     @PersistenceContext
     protected EntityManager entityManager;
@@ -26,15 +25,14 @@ public abstract class AbstractBaseRepository<T extends AbstractDaoEntity> implem
     }
 
     @Override
-    @Transactional
     public T create(T entity) {
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
-    public Optional<T> update(T entity) {
-        return Optional.ofNullable(entityManager.merge(entity));
+    public T update(T entity) {
+        return entityManager.merge(entity);
     }
 
     @Override
@@ -51,7 +49,7 @@ public abstract class AbstractBaseRepository<T extends AbstractDaoEntity> implem
 
         Predicate predicate = specification.toPredicate(from, criteriaQuery, criteriaBuilder);
         if (predicate != null && !predicate.getExpressions().isEmpty()) {
-            select.where(predicate).groupBy(from.get(AbstractDaoEntity_.ID));
+            select.where(predicate).groupBy(from.get(AbstractRepositoryEntity_.ID));
         }
 
         Sort sort = pageable.getSort();
@@ -88,7 +86,18 @@ public abstract class AbstractBaseRepository<T extends AbstractDaoEntity> implem
     }
 
     @Override
-    @Transactional
+    public Optional<T> findFirstBy(Specification<T> specification) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
+        Root<T> from = criteriaQuery.from(type);
+        criteriaQuery.select(from).where(specification.toPredicate(from, criteriaQuery, criteriaBuilder));
+        return entityManager.createQuery(criteriaQuery)
+                .getResultList()
+                .stream()
+                .findFirst();
+    }
+
+    @Override
     public void deleteById(long id) {
         entityManager.remove(findById(id).get());
     }

@@ -1,4 +1,4 @@
-package com.epam.esm.core.model.dto;
+package com.epam.esm.core.model.dto.request;
 
 
 import com.epam.esm.core.validation.NullOrNotBlank;
@@ -8,12 +8,14 @@ import java.util.List;
 
 
 public class GiftCertificateRequest extends PageRequestParameters {
-    private @Pattern(regexp = "^((!?in)|(eq)|(lk)):[^:]+") @Size(min = 5, max = 255)
-    @NullOrNotBlank String tag;
-    private List<@Pattern(regexp = "^!?((in)|(eq)|(lk)):[^:,]+") @Size(min = 5, max = 255)
-    @NotBlank String> name;
-    private List<@Pattern(regexp = "^!?((in)|(eq)|(lk)):[^:,]+") @Size(min = 5, max = 255)
-    @NotBlank String> description;
+    @NullOrNotBlank
+    @Pattern(regexp = "^((!?in)|(eq)|(lk)):[^:]+")
+    @Size(min = 5, max = 255)
+    private String tag;
+    private List<@Pattern(regexp = "^!?((in)|(eq)|(lk)):[^:,]+")
+    @Size(min = 5, max = 255) @NotBlank String> name;
+    private List<@Pattern(regexp = "^!?((in)|(eq)|(lk)):[^:,]+")
+    @Size(min = 5, max = 255) @NotBlank String> description;
 
     public String getTag() {
         return tag;

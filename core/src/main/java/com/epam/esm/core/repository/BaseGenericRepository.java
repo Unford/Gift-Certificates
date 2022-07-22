@@ -1,6 +1,6 @@
 package com.epam.esm.core.repository;
 
-import com.epam.esm.core.model.domain.AbstractDaoEntity;
+import com.epam.esm.core.model.domain.AbstractRepositoryEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
  *
  * @param <T> the type parameter
  */
-public interface BaseGenericRepository<T extends AbstractDaoEntity> {
+public interface BaseGenericRepository<T extends AbstractRepositoryEntity> {
     /**
      * Create t.
      *
@@ -21,13 +21,8 @@ public interface BaseGenericRepository<T extends AbstractDaoEntity> {
      */
     T create(T entity);
 
-    /**
-     * Update optional.
-     *
-     * @param entity the entity
-     * @return the optional
-     */
-    Optional<T> update(T entity);
+
+    T update(T entity);
 
 
     List<T> findAll(Pageable pageable);
@@ -39,6 +34,8 @@ public interface BaseGenericRepository<T extends AbstractDaoEntity> {
      * @return the optional
      */
     Optional<T> findById(long id);
+
+    Optional<T> findFirstBy(Specification<T> specification);
 
     /**
      * Find by name optional.

@@ -1,21 +1,19 @@
 package com.epam.esm.core.util;
 
-import com.epam.esm.core.repository.specification.RepositorySpecification;
-import com.epam.esm.core.repository.specification.JoinedRepositorySpecification;
-import com.epam.esm.core.repository.specification.SearchCriteria;
-import com.epam.esm.core.repository.specification.SearchOperation;
+import com.epam.esm.core.repository.specification.*;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.GiftCertificate_;
 import com.epam.esm.core.model.domain.Tag_;
-import com.epam.esm.core.model.dto.GiftCertificateRequest;
-import com.epam.esm.core.model.dto.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.GiftCertificateRequest;
+import com.epam.esm.core.model.dto.request.PageRequestParameters;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 
-public class RequestParser {
+public final class RequestParser {//todo to bean???
+    private RequestParser(){}
     private static final String DELIMITER_REGEX = ",\\s*";
     private static final String RHS_COLON_DELIMITER = ":";
     private static final String NEGATION_SIGN = "!";
@@ -70,8 +68,8 @@ public class RequestParser {
         if (searchCriteria != null) {
             if (searchCriteria.getOperation() == SearchOperation.IN) {
                 String[] values = searchCriteria.getValue().toString().split(DELIMITER_REGEX);
-                specification = searchCriteria.isNot() ? JoinedRepositorySpecification.notInTags(values) :
-                        JoinedRepositorySpecification.inTags(values);
+                specification = searchCriteria.isNot() ? CustomSpecifications.notInTags(values) :
+                        CustomSpecifications.inTags(values);
             } else {
                 specification = new JoinedRepositorySpecification<>(Collections.singletonList(searchCriteria),
                         GiftCertificate_.TAGS);

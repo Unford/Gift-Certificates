@@ -9,10 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
-public class Order extends AbstractDaoEntity {
+public class Order extends AbstractRepositoryEntity {
     private BigDecimal cost;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime purchaseDate;
     @ManyToOne()//todo fetch type
     @JoinColumn(name = "user_id")

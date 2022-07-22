@@ -11,11 +11,10 @@ import javax.validation.constraints.Positive;
  * The type Abstract dao entity.
  */
 @MappedSuperclass
-public abstract class AbstractDaoEntity {
+public abstract class AbstractRepositoryEntity {
     /**
      * The Id.
      */
-    @Positive
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
@@ -25,14 +24,14 @@ public abstract class AbstractDaoEntity {
      *
      * @param id the id
      */
-    AbstractDaoEntity(long id) {
+    AbstractRepositoryEntity(Long id) {
         this.id = id;
     }
 
     /**
      * Instantiates a new Abstract dao entity.
      */
-    AbstractDaoEntity() {
+    AbstractRepositoryEntity() {
 
     }
 
@@ -57,9 +56,9 @@ public abstract class AbstractDaoEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractDaoEntity)) return false;
+        if (!(o instanceof AbstractRepositoryEntity)) return false;
 
-        AbstractDaoEntity that = (AbstractDaoEntity) o;
+        AbstractRepositoryEntity that = (AbstractRepositoryEntity) o;
 
         return id != null ? id.equals(that.id) : that.id == null;
     }
@@ -71,7 +70,7 @@ public abstract class AbstractDaoEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("AbstractDaoEntity{");
+        final StringBuilder sb = new StringBuilder("AbstractRepositoryEntity{");
         sb.append("id=").append(id);
         sb.append('}');
         return sb.toString();

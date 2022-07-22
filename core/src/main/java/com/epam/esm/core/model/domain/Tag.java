@@ -1,14 +1,10 @@
 package com.epam.esm.core.model.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
 /**
@@ -16,13 +12,11 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "tags")
-public class Tag extends AbstractDaoEntity{
-    @NotBlank
-    @Size(max = 255, min = 5)
+public class Tag extends AbstractRepositoryEntity {
+
     @Column(unique = true)
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "tags")
     private Set<GiftCertificate> giftCertificates;
 
@@ -37,8 +31,12 @@ public class Tag extends AbstractDaoEntity{
      * @param id   the id
      * @param name the name
      */
-    public Tag(long id, String name){
+    public Tag(Long id, String name){
         super(id);
+        this.name = name;
+    }
+
+    public Tag(String name){
         this.name = name;
     }
 

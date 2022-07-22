@@ -1,58 +1,77 @@
 package com.epam.esm.core.service.impl;
 
+import com.epam.esm.core.model.dto.GiftCertificateDto;
+import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
-import com.epam.esm.core.model.dto.PageRequestParameters;
-import com.epam.esm.core.service.BaseService;
+import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.service.TagService;
 import com.epam.esm.core.util.RequestParser;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * The type Tag service.
  */
 @Service
-public class TagServiceImpl implements BaseService<Tag> {
+public class TagServiceImpl implements TagService {
     private final TagRepositoryImpl tagRepository;
+    private final ModelMapper modelMapper;
 
     /**
      * Instantiates a new Tag service.
      *
      * @param tagRepository the tag dao
+     * @param modelMapper tag mapper
      */
     @Autowired
-    public TagServiceImpl(TagRepositoryImpl tagRepository) {
+    public TagServiceImpl(TagRepositoryImpl tagRepository, ModelMapper modelMapper) {
         this.tagRepository = tagRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Tag create(Tag entity) throws ServiceException {
+    @Transactional
+    public TagDto create(TagDto entity) throws ServiceException {
         if (tagRepository.findByName(entity.getName()).isPresent()) {
             throw new ServiceException(entity.getName(), CustomErrorCode.RESOURCE_ALREADY_EXIST);
         }
-        return tagRepository.create(entity);
+        Tag newTag = tagRepository.create(modelMapper.map(entity, Tag.class));
+        modelMapper.map(newTag, entity);
+        return entity;
     }
 
     @Override
-    public List<Tag> findAll(PageRequestParameters pageRequestParameters) {
-        return tagRepository.findAll(RequestParser.convertToPageable(pageRequestParameters));
+    public List<TagDto> findAll(PageRequestParameters pageRequestParameters) {
+        List<Tag> tags = tagRepository.findAll(RequestParser.convertToPageable(pageRequestParameters));
+        return tags.stream()
+                .map(tag -> modelMapper.map(tag, TagDto.class))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Tag findById(long id) throws ServiceException {
+    public TagDto findById(long id) throws ServiceException {
         Optional<Tag> result = tagRepository.findById(id);
-        return result.orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
+        Tag tag = result.orElseThrow(() -> new ServiceException(Long.toString(id),
+                CustomErrorCode.RESOURCE_NOT_FOUND));
+        return modelMapper.map(tag, TagDto.class);
     }
 
 
     @Override
+    @Transactional
     public void deleteById(long id) throws ServiceException {
-        Tag tag = this.findById(id);
+        Optional<Tag> result = tagRepository.findById(id);
+        Tag tag = result.orElseThrow(() -> new ServiceException(Long.toString(id),
+                CustomErrorCode.RESOURCE_NOT_FOUND));
         if (!tag.getGiftCertificates().isEmpty()) {
             throw new ServiceException(Long.toString(id), CustomErrorCode.CONFLICT_DELETE);
         }
@@ -60,7 +79,8 @@ public class TagServiceImpl implements BaseService<Tag> {
     }
 
     @Override
-    public Tag update(Tag entity) {
+    public TagDto update(TagDto entity) {
         throw new UnsupportedOperationException("Update command is forbidden for tag service");
     }
+
 }

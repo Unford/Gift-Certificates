@@ -4,8 +4,6 @@ import com.epam.esm.core.repository.AbstractBaseRepository;
 import com.epam.esm.core.model.domain.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
 public class UserRepositoryImpl extends AbstractBaseRepository<User> {
 
@@ -19,7 +17,7 @@ public class UserRepositoryImpl extends AbstractBaseRepository<User> {
     }
 
     @Override
-    public Optional<User> update(User entity) {
+    public User update(User entity) {
         throw new UnsupportedOperationException("Update command is forbidden for user repository");
     }
 

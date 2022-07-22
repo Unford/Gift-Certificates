@@ -1,26 +1,18 @@
 package com.epam.esm.core.model.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User extends AbstractDaoEntity {
-    @NotBlank
-    @Size(max = 255, min = 5)
+public class User extends AbstractRepositoryEntity {
     private String name;
-    @NotBlank
-    @Size(max = 255, min = 5)
     @Column(unique = true)
     private String login;
-    @JsonIgnore
-    @NotBlank
-    @Size(max = 255, min = 5)
     private String password;
 
     @OneToMany(mappedBy = "user")

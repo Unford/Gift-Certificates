@@ -13,7 +13,7 @@ public class OrderRepositoryImpl extends AbstractBaseRepository<Order> {
     }
 
     @Override
-    public Optional<Order> update(Order entity) {
+    public Order update(Order entity) {
         throw new UnsupportedOperationException("Update command is forbidden for order repository");
     }
 

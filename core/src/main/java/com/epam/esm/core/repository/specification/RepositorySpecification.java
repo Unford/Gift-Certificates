@@ -1,13 +1,13 @@
 package com.epam.esm.core.repository.specification;
 
-import com.epam.esm.core.model.domain.AbstractDaoEntity;
+import com.epam.esm.core.model.domain.AbstractRepositoryEntity;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepositorySpecification<T extends AbstractDaoEntity> implements Specification<T> {
+public class RepositorySpecification<T extends AbstractRepositoryEntity> implements Specification<T> {
     private static final String PERCENT_SIGN = "%";
     protected final List<SearchCriteria> criteriaList;
 

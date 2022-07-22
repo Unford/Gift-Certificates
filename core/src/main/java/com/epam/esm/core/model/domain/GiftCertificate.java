@@ -1,16 +1,6 @@
 package com.epam.esm.core.model.domain;
 
-import com.epam.esm.core.validation.CreateValidation;
-import com.epam.esm.core.validation.NullOrNotBlank;
-import com.epam.esm.core.validation.UpdateValidation;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import javax.persistence.*;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -20,30 +10,22 @@ import java.util.Set;
 /**
  * The type Gift certificate.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "gift_certificates")
-public class GiftCertificate extends AbstractDaoEntity {
-    @NotBlank(groups = {CreateValidation.class})
-    @NullOrNotBlank(groups = {UpdateValidation.class})
-    @Size(max = 255, min = 5)
+public class GiftCertificate extends AbstractRepositoryEntity {
+
     private String name;
-    @Size(max = 255, min = 5)
     private String description;
-    @Positive
     private BigDecimal price;
-    @Positive
     private Integer duration;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime lastUpdateDate;
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private Set<@Valid Tag> tags;
+    private Set<Tag> tags;
 
     @ManyToMany(mappedBy = "giftCertificates")
     private Set<Order> orders;
@@ -51,7 +33,8 @@ public class GiftCertificate extends AbstractDaoEntity {
     /**
      * Instantiates a new Gift certificate.
      */
-    public GiftCertificate() {}
+    public GiftCertificate() {
+    }
 
     private GiftCertificate(GiftCertificateBuilder builder) {
         super(builder.id);
@@ -202,6 +185,14 @@ public class GiftCertificate extends AbstractDaoEntity {
      */
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
 
     @Override
