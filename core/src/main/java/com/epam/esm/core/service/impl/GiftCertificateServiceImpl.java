@@ -39,7 +39,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         this.modelMapper = modelMapper;
     }
 
-    @Transactional
     @Override
     public GiftCertificateDto create(GiftCertificateDto giftCertificateDto) throws ServiceException {
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
@@ -67,7 +66,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
     @Override
-    @Transactional
     public GiftCertificateDto update(GiftCertificateDto entity) throws ServiceException {
         GiftCertificate giftCertificate = certificateRepository.findById(entity.getId())
                 .orElseThrow(() -> new ServiceException(Long.toString(entity.getId()),
@@ -82,7 +80,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    @Transactional
     public void deleteById(long id) throws ServiceException {
         GiftCertificate certificate = certificateRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));

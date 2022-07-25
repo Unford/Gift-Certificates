@@ -1,6 +1,6 @@
 package com.epam.esm.core.service.impl;
 
-import com.epam.esm.core.model.dto.GiftCertificateDto;
+import com.epam.esm.core.model.domain.User;
 import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
@@ -30,7 +30,7 @@ public class TagServiceImpl implements TagService {
      * Instantiates a new Tag service.
      *
      * @param tagRepository the tag dao
-     * @param modelMapper tag mapper
+     * @param modelMapper   tag mapper
      */
     @Autowired
     public TagServiceImpl(TagRepositoryImpl tagRepository, ModelMapper modelMapper) {
@@ -39,7 +39,6 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    @Transactional
     public TagDto create(TagDto entity) throws ServiceException {
         if (tagRepository.findByName(entity.getName()).isPresent()) {
             throw new ServiceException(entity.getName(), CustomErrorCode.RESOURCE_ALREADY_EXIST);
@@ -67,7 +66,6 @@ public class TagServiceImpl implements TagService {
 
 
     @Override
-    @Transactional
     public void deleteById(long id) throws ServiceException {
         Optional<Tag> result = tagRepository.findById(id);
         Tag tag = result.orElseThrow(() -> new ServiceException(Long.toString(id),
@@ -83,4 +81,11 @@ public class TagServiceImpl implements TagService {
         throw new UnsupportedOperationException("Update command is forbidden for tag service");
     }
 
+    @Override
+    public TagDto findTheMostWidelyUsedTag() throws ServiceException {
+        Tag tag = tagRepository.findTheMostWidelyUsedTag()
+                .orElseThrow(() -> new ServiceException("The most widely used tag",
+                        CustomErrorCode.RESOURCE_NOT_FOUND));
+        return modelMapper.map(tag, TagDto.class);
+    }
 }

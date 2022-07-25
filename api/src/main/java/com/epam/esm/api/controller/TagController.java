@@ -59,6 +59,11 @@ public class TagController {
         return service.findAll(pageRequestParameters);
     }
 
+    @GetMapping(value = "/the-most-widely")
+    public TagDto getTheMostWidelyUsedTag() throws ServiceException {
+        return service.findTheMostWidelyUsedTag();
+    }
+
     /**
      * Create tag response entity.
      *

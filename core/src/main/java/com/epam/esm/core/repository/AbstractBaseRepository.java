@@ -5,6 +5,7 @@ import com.epam.esm.core.model.domain.AbstractRepositoryEntity_;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -25,12 +26,14 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
     }
 
     @Override
+    @Transactional
     public T create(T entity) {
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
+    @Transactional
     public T update(T entity) {
         return entityManager.merge(entity);
     }
@@ -98,6 +101,7 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
     }
 
     @Override
+    @Transactional
     public void deleteById(long id) {
         entityManager.remove(findById(id).get());
     }

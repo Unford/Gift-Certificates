@@ -62,7 +62,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @Transactional
     public OrderDto createUserOrder(long userId, List<Long> certificatesIds) throws ServiceException {
         User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
                 CustomErrorCode.RESOURCE_NOT_FOUND));
