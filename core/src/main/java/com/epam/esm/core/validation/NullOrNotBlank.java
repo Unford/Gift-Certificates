@@ -14,9 +14,6 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.hibernate.validator.constraints.CompositionType.OR;
 
-/**
- * The interface Null or not blank.
- */
 @ConstraintComposition(OR)
 @Null
 @NotBlank
@@ -25,24 +22,9 @@ import static org.hibernate.validator.constraints.CompositionType.OR;
 @Retention(RUNTIME)
 @Constraint(validatedBy = { })
 public @interface NullOrNotBlank {
-    /**
-     * Message string.
-     *
-     * @return the string
-     */
     String message() default "must not be blank";
 
-    /**
-     * Groups class [ ].
-     *
-     * @return the class [ ]
-     */
     Class<?>[] groups() default { };
 
-    /**
-     * Payload class [ ].
-     *
-     * @return the class [ ]
-     */
     Class<? extends Payload>[] payload() default { };
 }

@@ -1,62 +1,49 @@
 package com.epam.esm.api.controller;
 
+import com.epam.esm.api.hateoas.assembler.impl.TagCollectionAssembler;
 import com.epam.esm.core.exception.ServiceException;
-import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.model.dto.request.PageRequestParameters;
 import com.epam.esm.core.service.impl.TagServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.ExposesResourceFor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
 import java.util.List;
 
-/**
- * The type Tag controller.
- */
 @RestController
 @RequestMapping("/tags")
 @Validated
+@ExposesResourceFor(TagDto.class)
 public class TagController {
     private final TagServiceImpl service;
+    private final TagCollectionAssembler collectionAssembler;
 
-    /**
-     * Instantiates a new Tag controller.
-     *
-     * @param service the service
-     */
     @Autowired
-    public TagController(TagServiceImpl service) {
+    public TagController(TagServiceImpl service, TagCollectionAssembler collectionAssembler) {
         this.service = service;
+        this.collectionAssembler = collectionAssembler;
     }
 
-    /**
-     * Gets tag by id.
-     *
-     * @param id the id
-     * @return the tag by id
-     * @throws ServiceException the service exception
-     */
     @GetMapping("/{id}")
     public TagDto getTagById(@PathVariable("id") @Positive long id) throws ServiceException {
         return service.findById(id);
     }
 
-    /**
-     * Gets all tags.
-     *
-     * @return the all tags
-     */
     @GetMapping
-    public List<TagDto> getTags(@Valid PageRequestParameters pageRequestParameters, BindingResult bindingResult) {
-        return service.findAll(pageRequestParameters);
+    public CollectionModel<TagDto> getTags(
+            @RequestParam(name = "page", required = false, defaultValue = "1") @Positive int page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") @Positive int size)
+            throws ServiceException {
+        PageRequestParameters pageRequestParameters = PageRequestParameters.of(page, size);
+        List<TagDto> tags = service.findAll(pageRequestParameters);
+        return collectionAssembler.toCollectionModel(tags, pageRequestParameters);
     }
 
     @GetMapping(value = "/the-most-widely")
@@ -64,34 +51,17 @@ public class TagController {
         return service.findTheMostWidelyUsedTag();
     }
 
-    /**
-     * Create tag response entity.
-     *
-     * @param tag the tag
-     * @return the response entity
-     * @throws ServiceException the service exception
-     */
     @PostMapping
-    public ResponseEntity<TagDto> createTag(@RequestBody @Valid TagDto tag) throws ServiceException {
-        service.create(tag);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(tag.getId())
-                .toUri();
-        return ResponseEntity.created(location).body(tag);
+    @ResponseStatus(HttpStatus.CREATED)
+    public TagDto createTag(@RequestBody @Valid TagDto tag) throws ServiceException {
+        return service.create(tag);
     }
 
-    /**
-     * Delete tag by id.
-     *
-     * @param id the id
-     * @throws ServiceException the service exception
-     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTagById(@PathVariable("id") @Positive long id) throws ServiceException {
+    public ResponseEntity<TagDto> deleteTagById(@PathVariable("id") @Positive long id) throws ServiceException {
         service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

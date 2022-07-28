@@ -13,11 +13,10 @@ subprojects {
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.0'
         implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
-        implementation 'org.modelmapper:modelmapper:3.1.0'
 
         implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.2'
         implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.2'
-
+        implementation 'org.springframework.boot:spring-boot-starter-hateoas'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     }

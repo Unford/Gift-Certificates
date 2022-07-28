@@ -3,20 +3,20 @@ package com.epam.esm.core.model.dto;
 import com.epam.esm.core.validation.CreateValidation;
 import com.epam.esm.core.validation.NullOrNotBlank;
 import com.epam.esm.core.validation.UpdateValidation;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
-
-public class GiftCertificateDto implements Serializable {
+@Relation(collectionRelation = "certificates", itemRelation = "certificate")
+public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> {
     @Positive
     private Long id;
     @NotBlank(groups = {CreateValidation.class})

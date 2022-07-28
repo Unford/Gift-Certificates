@@ -1,17 +1,21 @@
 package com.epam.esm.core.model.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
-
-public class TagDto implements Serializable {
+@Relation(collectionRelation = "tags", itemRelation = "tag")
+public class TagDto extends RepresentationModel<TagDto> {
     @Positive
     private Long id;
     @NotBlank
     @Size(max = 255, min = 5)
     private String name;
+
 
     public TagDto() {
     }

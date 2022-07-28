@@ -6,9 +6,6 @@ import com.epam.esm.core.model.domain.GiftCertificate;
 import org.springframework.stereotype.Repository;
 
 
-/**
- * The type Gift certificate dao.
- */
 @Repository
 public class GiftCertificateRepositoryImpl extends AbstractBaseRepository<GiftCertificate> {
     public GiftCertificateRepositoryImpl() {

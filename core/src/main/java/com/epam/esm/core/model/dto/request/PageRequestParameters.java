@@ -12,6 +12,15 @@ public class PageRequestParameters {
 
     private String sort;
 
+    public PageRequestParameters(int page, int size, String sort) {
+        this.page = page;
+        this.size = size;
+        this.sort = sort;
+    }
+
+    public PageRequestParameters() {
+    }
+
     public int getPage() {
         return page;
     }
@@ -34,6 +43,14 @@ public class PageRequestParameters {
 
     public void setSort(String sort) {
         this.sort = sort;
+    }
+
+    public static PageRequestParameters of(int page, int size, String sort) {
+        return new PageRequestParameters(page, size, sort);
+    }
+
+    public static PageRequestParameters of(int page, int size) {
+        return PageRequestParameters.of(page, size, null);
     }
 
 }

@@ -10,16 +10,8 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import java.util.Arrays;
 import java.util.Locale;
 
-/**
- * The type Controller config.
- */
 @Configuration
 public class LocaleConfig implements WebMvcConfigurer {
-    /**
-     * Locale resolver locale resolver.
-     *
-     * @return the locale resolver
-     */
     @Bean
     public LocaleResolver localeResolver() {
         final AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
@@ -28,11 +20,6 @@ public class LocaleConfig implements WebMvcConfigurer {
         return resolver;
     }
 
-    /**
-     * Message source resource bundle message source.
-     *
-     * @return the resource bundle message source
-     */
     @Bean
     public ResourceBundleMessageSource messageSource() {
         ResourceBundleMessageSource resourceBundleMessageSource = new ResourceBundleMessageSource();

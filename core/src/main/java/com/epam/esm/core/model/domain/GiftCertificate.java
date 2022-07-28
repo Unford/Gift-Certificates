@@ -7,9 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-/**
- * The type Gift certificate.
- */
 @Entity
 @Table(name = "gift_certificates")
 public class GiftCertificate extends AbstractRepositoryEntity {
@@ -30,9 +27,6 @@ public class GiftCertificate extends AbstractRepositoryEntity {
     @ManyToMany(mappedBy = "giftCertificates")
     private Set<Order> orders;
 
-    /**
-     * Instantiates a new Gift certificate.
-     */
     public GiftCertificate() {
     }
 
@@ -61,128 +55,58 @@ public class GiftCertificate extends AbstractRepositoryEntity {
     }
 
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Sets description.
-     *
-     * @param description the description
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * Gets price.
-     *
-     * @return the price
-     */
     public BigDecimal getPrice() {
         return price;
     }
 
-    /**
-     * Sets price.
-     *
-     * @param price the price
-     */
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    /**
-     * Gets duration.
-     *
-     * @return the duration
-     */
     public Integer getDuration() {
         return duration;
     }
 
-    /**
-     * Sets duration.
-     *
-     * @param duration the duration
-     */
     public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
-    /**
-     * Gets create date.
-     *
-     * @return the create date
-     */
     public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    /**
-     * Sets create date.
-     *
-     * @param createDate the create date
-     */
     public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    /**
-     * Gets last update date.
-     *
-     * @return the last update date
-     */
     public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    /**
-     * Sets last update date.
-     *
-     * @param lastUpdateDate the last update date
-     */
     public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    /**
-     * Gets tags.
-     *
-     * @return the tags
-     */
     public Set<Tag> getTags() {
         return this.tags;
     }
 
-    /**
-     * Sets tags.
-     *
-     * @param tags the tags
-     */
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
@@ -241,9 +165,6 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         return sb.toString();
     }
 
-    /**
-     * The type Gift certificate builder.
-     */
     public static class GiftCertificateBuilder {
         private long id;
         private String name;
@@ -254,103 +175,50 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         private LocalDateTime lastUpdateDate;
         private Set<Tag> tags = new HashSet<>();
 
-        /**
-         * Id gift certificate builder.
-         *
-         * @param id the id
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder id(long id) {
             this.id = id;
             return this;
         }
 
 
-        /**
-         * Name gift certificate builder.
-         *
-         * @param name the name
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder name(String name) {
             this.name = name;
             return this;
         }
 
 
-        /**
-         * Description gift certificate builder.
-         *
-         * @param description the description
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder description(String description) {
             this.description = description;
             return this;
         }
 
 
-        /**
-         * Price gift certificate builder.
-         *
-         * @param price the price
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder price(BigDecimal price) {
             this.price = price;
             return this;
         }
 
-        /**
-         * Duration gift certificate builder.
-         *
-         * @param duration the duration
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder duration(int duration) {
             this.duration = duration;
             return this;
         }
 
-        /**
-         * Create date gift certificate builder.
-         *
-         * @param createDate the create date
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder createDate(LocalDateTime createDate) {
             this.createDate = createDate;
             return this;
         }
 
-        /**
-         * Last update date gift certificate builder.
-         *
-         * @param lastUpdateDate the last update date
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder lastUpdateDate(LocalDateTime lastUpdateDate) {
             this.lastUpdateDate = lastUpdateDate;
             return this;
         }
 
 
-        /**
-         * Tags gift certificate builder.
-         *
-         * @param tags the tags
-         * @return the gift certificate builder
-         */
         public GiftCertificateBuilder tags(Set<Tag> tags) {
             this.tags = tags;
             return this;
         }
 
-        /**
-         * Build gift certificate.
-         *
-         * @return the gift certificate
-         */
         public GiftCertificate build() {
             return new GiftCertificate(this);
         }

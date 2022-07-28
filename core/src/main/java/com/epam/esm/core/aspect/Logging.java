@@ -10,27 +10,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-/**
- * The type Logging.
- */
 @Aspect
 @Component
 public class Logging {
     private static final Logger logger = LogManager.getLogger();
 
-    /**
-     * Execute logging.
-     */
     @Pointcut("execution(* com.epam.esm.core.*.*.*(..))")
     public void executeLogging() {}
 
-    /**
-     * Log method call object.
-     *
-     * @param joinPoint the join point
-     * @return the object
-     * @throws Throwable the throwable
-     */
     @Around("executeLogging()")
     public Object logMethodCall(ProceedingJoinPoint joinPoint) throws Throwable {
         StringBuilder builder = new StringBuilder("Method: ")

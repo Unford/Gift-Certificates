@@ -11,6 +11,7 @@ import com.epam.esm.core.service.TagService;
 import com.epam.esm.core.util.RequestParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,20 +19,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * The type Tag service.
- */
 @Service
 public class TagServiceImpl implements TagService {
     private final TagRepositoryImpl tagRepository;
     private final ModelMapper modelMapper;
 
-    /**
-     * Instantiates a new Tag service.
-     *
-     * @param tagRepository the tag dao
-     * @param modelMapper   tag mapper
-     */
     @Autowired
     public TagServiceImpl(TagRepositoryImpl tagRepository, ModelMapper modelMapper) {
         this.tagRepository = tagRepository;

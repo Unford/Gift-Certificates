@@ -27,19 +27,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * The type Controller exception handler.
- */
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private final static String CONSTRAINT_VIOLATION_MESSAGE_PATTERN = "[%s]:'%s' %s";
     private final MessageSource messageSource;
 
-    /**
-     * Instantiates a new Controller exception handler.
-     *
-     * @param messageSource the message source
-     */
     public ControllerExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
@@ -94,12 +86,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
-    /**
-     * Handle service exception response entity.
-     *
-     * @param ex the ex
-     * @return the response entity
-     */
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorInfo> handleServiceException(ServiceException ex) {
         CustomErrorCode errorCode = ex.getErrorCode();
@@ -109,12 +95,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
-    /**
-     * Handle method argument type mismatch exception response entity.
-     *
-     * @param ex the ex
-     * @return the response entity
-     */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorInfo> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         CustomErrorCode errorCode = CustomErrorCode.TYPE_MISMATCH;
@@ -127,12 +107,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
-    /**
-     * Handle constraint violation exception response entity.
-     *
-     * @param ex the ex
-     * @return the response entity
-     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorInfo> handleConstraintViolationException(ConstraintViolationException ex) {
         CustomErrorCode errorCode = CustomErrorCode.CONSTRAINT_VIOLATION;
@@ -150,12 +124,6 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
-    /**
-     * Handle exception internal response entity.
-     *
-     * @param ex the ex
-     * @return the response entity
-     */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex) {
         CustomErrorCode errorCode = CustomErrorCode.INTERNAL_EXCEPTION;

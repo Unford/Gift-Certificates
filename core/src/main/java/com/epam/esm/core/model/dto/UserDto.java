@@ -1,12 +1,16 @@
 package com.epam.esm.core.model.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UserDto implements Serializable {
+@Relation(collectionRelation = "users", itemRelation = "user")
+public class UserDto extends RepresentationModel<UserDto> {
     @Positive
     private Long id;
     @NotBlank

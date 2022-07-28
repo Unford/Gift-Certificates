@@ -5,7 +5,6 @@ import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Order;
 import com.epam.esm.core.model.domain.User;
-import com.epam.esm.core.model.dto.GiftCertificateDto;
 import com.epam.esm.core.model.dto.OrderDto;
 import com.epam.esm.core.model.dto.request.PageRequestParameters;
 import com.epam.esm.core.repository.impl.GiftCertificateRepositoryImpl;
@@ -16,7 +15,6 @@ import com.epam.esm.core.service.OrderService;
 import com.epam.esm.core.util.RequestParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto findUserOrderById(long userId, long orderId) throws ServiceException {
         userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
                 CustomErrorCode.RESOURCE_NOT_FOUND));
-        Order order = orderRepository.findFirstBy(CustomSpecifications.whereUserIdAndOrderId(userId, orderId))
+        Order order = orderRepository.findFirstWhere(CustomSpecifications.whereUserIdAndOrderId(userId, orderId))
                 .orElseThrow(() -> new ServiceException(Long.toString(orderId), CustomErrorCode.RESOURCE_NOT_FOUND));
         return modelMapper.map(order, OrderDto.class);
     }

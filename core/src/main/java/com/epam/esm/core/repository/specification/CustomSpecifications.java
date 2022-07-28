@@ -32,7 +32,7 @@ public final class CustomSpecifications {
     }
 
     public static Specification<Order> whereUserId(long userId) {
-        return (root, query, builder) -> builder.equal(root.get(Order_.USER), userId);
+        return (root, query, builder) -> builder.equal(root.get(Order_.user), userId);
     }
 
     public static Specification<Order> whereUserIdAndOrderId(long userId, long orderId) {

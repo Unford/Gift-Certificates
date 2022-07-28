@@ -7,9 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * The type Tag dao.
- */
 @Repository
 public class TagRepositoryImpl extends AbstractBaseRepository<Tag> implements TagRepository {
     private static final String FIND_THE_MOST_WIDELY_USED_TAG_QUERY = "SELECT tags.* FROM (" +

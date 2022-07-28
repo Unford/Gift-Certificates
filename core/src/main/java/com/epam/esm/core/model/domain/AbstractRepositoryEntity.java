@@ -7,48 +7,24 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Positive;
 
-/**
- * The type Abstract dao entity.
- */
 @MappedSuperclass
 public abstract class AbstractRepositoryEntity {
-    /**
-     * The Id.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
-    /**
-     * Instantiates a new Abstract dao entity.
-     *
-     * @param id the id
-     */
     AbstractRepositoryEntity(Long id) {
         this.id = id;
     }
 
-    /**
-     * Instantiates a new Abstract dao entity.
-     */
     AbstractRepositoryEntity() {
 
     }
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
     public Long getId() {
         return id;
     }
 
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
     public void setId(Long id) {
         this.id = id;
     }

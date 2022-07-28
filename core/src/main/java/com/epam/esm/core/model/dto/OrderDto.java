@@ -1,17 +1,25 @@
 package com.epam.esm.core.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-public class OrderDto implements Serializable {
+@Relation(collectionRelation = "orders", itemRelation = "order")
+public class OrderDto extends RepresentationModel<OrderDto> {
     @Positive
     private Long id;
     @Positive
     private BigDecimal cost;
     private LocalDateTime purchaseDate;
+
+    @JsonIgnore
+    private Long userId;
+
 
     public OrderDto() {
     }
@@ -44,6 +52,14 @@ public class OrderDto implements Serializable {
 
     public void setPurchaseDate(LocalDateTime purchaseDate) {
         this.purchaseDate = purchaseDate;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     @Override

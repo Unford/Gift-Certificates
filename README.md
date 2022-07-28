@@ -17,6 +17,6 @@ The system should be extended to expose the following REST APIs:
      * Demonstrate SQL execution plan for this query (explain).
 7. - [x] Search for gift certificates by several tags (“and” condition).
 8. - [x] Pagination should be implemented for all GET endpoints. Please, create a flexible and non-erroneous solution. Handle
-   all exceptional cases.
-9. Support HATEOAS on REST endpoints.
+     all exceptional cases.
+9. - [x] Support HATEOAS on REST endpoints.
 10. Test app

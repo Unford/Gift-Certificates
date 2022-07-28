@@ -48,28 +48,40 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
         Root<T> from = criteriaQuery.from(type);
-        CriteriaQuery<T> select = criteriaQuery.select(from);
 
+        CriteriaQuery<T> select = criteriaQuery.select(from);
         Predicate predicate = specification.toPredicate(from, criteriaQuery, criteriaBuilder);
-        if (predicate != null && !predicate.getExpressions().isEmpty()) {
+        if (predicate != null) {
             select.where(predicate).groupBy(from.get(AbstractRepositoryEntity_.ID));
         }
 
         Sort sort = pageable.getSort();
         if (!sort.isEmpty()) {
-            List<Order> orderList = new ArrayList<>();
-            sort.get().forEach(order -> orderList.add(order.getDirection() == Sort.Direction.ASC ?
-                    criteriaBuilder.asc(from.get(order.getProperty())) :
-                    criteriaBuilder.desc(from.get(order.getProperty()))));
-            select.orderBy(orderList);
+            select.orderBy(extractOrders(sort, criteriaBuilder, from));
         }
+
         List<T> entities = entityManager.createQuery(select)
                 .setFirstResult((pageable.getPageNumber() - 1) * pageable.getPageSize())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
+
         return entities;
     }
 
+    @Override
+    public Long countAllWhere(Specification<T> specification) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<T> from = criteriaQuery.from(type);
+        CriteriaQuery<Long> select = criteriaQuery.select(criteriaBuilder.count(from.get(AbstractRepositoryEntity_.ID)));
+
+        Predicate predicate = specification.toPredicate(from, criteriaQuery, criteriaBuilder);
+        if (predicate != null && !predicate.getExpressions().isEmpty()) {
+            select.where(predicate).groupBy(from.get(AbstractRepositoryEntity_.ID));
+        }
+        Long count = entityManager.createQuery(select).getSingleResult();
+        return count;
+    }
 
     @Override
     public Optional<T> findById(long id) {
@@ -89,7 +101,7 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
     }
 
     @Override
-    public Optional<T> findFirstBy(Specification<T> specification) {
+    public Optional<T> findFirstWhere(Specification<T> specification) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(type);
         Root<T> from = criteriaQuery.from(type);
@@ -106,6 +118,12 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
         entityManager.remove(findById(id).get());
     }
 
-
+    private List<Order> extractOrders(Sort sort, CriteriaBuilder criteriaBuilder, Root<T> from) {
+        List<Order> orderList = new ArrayList<>();
+        sort.get().forEach(order -> orderList.add(order.getDirection() == Sort.Direction.ASC ?
+                criteriaBuilder.asc(from.get(order.getProperty())) :
+                criteriaBuilder.desc(from.get(order.getProperty()))));
+        return orderList;
+    }
 
 }
