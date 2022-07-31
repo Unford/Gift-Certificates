@@ -1,7 +1,5 @@
 package com.epam.esm.core.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +10,7 @@ import java.util.List;
 public class Order extends AbstractRepositoryEntity {
     private BigDecimal cost;
     private LocalDateTime purchaseDate;
-    @ManyToOne()//todo fetch type
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 

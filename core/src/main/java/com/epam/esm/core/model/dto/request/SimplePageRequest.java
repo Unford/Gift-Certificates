@@ -4,7 +4,7 @@ package com.epam.esm.core.model.dto.request;
 import javax.validation.constraints.Positive;
 
 
-public class PageRequestParameters {
+public class SimplePageRequest {
     @Positive
     private int page = 1;
     @Positive
@@ -12,13 +12,13 @@ public class PageRequestParameters {
 
     private String sort;
 
-    public PageRequestParameters(int page, int size, String sort) {
+    public SimplePageRequest(int page, int size, String sort) {
         this.page = page;
         this.size = size;
         this.sort = sort;
     }
 
-    public PageRequestParameters() {
+    public SimplePageRequest() {
     }
 
     public int getPage() {
@@ -45,12 +45,12 @@ public class PageRequestParameters {
         this.sort = sort;
     }
 
-    public static PageRequestParameters of(int page, int size, String sort) {
-        return new PageRequestParameters(page, size, sort);
+    public static SimplePageRequest of(int page, int size, String sort) {
+        return new SimplePageRequest(page, size, sort);
     }
 
-    public static PageRequestParameters of(int page, int size) {
-        return PageRequestParameters.of(page, size, null);
+    public static SimplePageRequest of(int page, int size) {
+        return SimplePageRequest.of(page, size, null);
     }
 
 }

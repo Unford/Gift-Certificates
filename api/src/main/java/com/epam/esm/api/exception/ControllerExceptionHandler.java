@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
-    private final static String CONSTRAINT_VIOLATION_MESSAGE_PATTERN = "[%s]:'%s' %s";
+    private static final String CONSTRAINT_VIOLATION_MESSAGE_PATTERN = "[%s]:'%s' %s";
     private final MessageSource messageSource;
 
     public ControllerExceptionHandler(MessageSource messageSource) {

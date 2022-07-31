@@ -5,9 +5,9 @@ import com.epam.esm.core.repository.impl.UserRepositoryImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.User;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.service.BaseService;
-import com.epam.esm.core.util.RequestParser;
+import com.epam.esm.core.util.RequestParameterParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +30,8 @@ public class UserServiceImpl implements BaseService<UserDto> {
 
 
     @Override
-    public List<UserDto> findAll(PageRequestParameters pageRequestParameters) {
-        return userRepository.findAll(RequestParser.convertToPageable(pageRequestParameters))
+    public List<UserDto> findAll(SimplePageRequest simplePage) {
+        return userRepository.findAll(RequestParameterParser.convertToPageable(simplePage))
                 .stream()
                 .map(u -> modelMapper.map(u, UserDto.class))
                 .collect(Collectors.toList());

@@ -3,8 +3,8 @@ package com.epam.esm.api.controller;
 import com.epam.esm.api.hateoas.assembler.impl.TagCollectionAssembler;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.dto.TagDto;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
-import com.epam.esm.core.service.impl.TagServiceImpl;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
+import com.epam.esm.core.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.ExposesResourceFor;
@@ -22,11 +22,11 @@ import java.util.List;
 @Validated
 @ExposesResourceFor(TagDto.class)
 public class TagController {
-    private final TagServiceImpl service;
+    private final TagService service;
     private final TagCollectionAssembler collectionAssembler;
 
     @Autowired
-    public TagController(TagServiceImpl service, TagCollectionAssembler collectionAssembler) {
+    public TagController(TagService service, TagCollectionAssembler collectionAssembler) {
         this.service = service;
         this.collectionAssembler = collectionAssembler;
     }
@@ -41,9 +41,9 @@ public class TagController {
             @RequestParam(name = "page", required = false, defaultValue = "1") @Positive int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") @Positive int size)
             throws ServiceException {
-        PageRequestParameters pageRequestParameters = PageRequestParameters.of(page, size);
-        List<TagDto> tags = service.findAll(pageRequestParameters);
-        return collectionAssembler.toCollectionModel(tags, pageRequestParameters);
+        SimplePageRequest simplePage = SimplePageRequest.of(page, size);
+        List<TagDto> tags = service.findAll(simplePage);
+        return collectionAssembler.toCollectionModel(tags, simplePage);
     }
 
     @GetMapping(value = "/the-most-widely")

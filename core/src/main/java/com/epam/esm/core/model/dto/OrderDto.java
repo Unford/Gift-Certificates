@@ -5,10 +5,10 @@ import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
 import javax.validation.constraints.Positive;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
+
 @Relation(collectionRelation = "orders", itemRelation = "order")
 public class OrderDto extends RepresentationModel<OrderDto> {
     @Positive
@@ -25,9 +25,14 @@ public class OrderDto extends RepresentationModel<OrderDto> {
     }
 
     public OrderDto(Long id, BigDecimal cost, LocalDateTime purchaseDate) {
+        this(id, cost, purchaseDate, null);
+    }
+
+    public OrderDto(Long id, BigDecimal cost, LocalDateTime purchaseDate, Long userId) {
         this.id = id;
         this.cost = cost;
         this.purchaseDate = purchaseDate;
+        this.userId = userId;
     }
 
     public Long getId() {

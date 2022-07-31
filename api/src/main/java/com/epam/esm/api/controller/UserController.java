@@ -5,11 +5,12 @@ import com.epam.esm.api.hateoas.assembler.impl.UserCollectionAssembler;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.dto.OrderDto;
 import com.epam.esm.core.model.dto.UserDto;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.service.OrderService;
 import com.epam.esm.core.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,18 +50,18 @@ public class UserController {
             @RequestParam(name = "page", required = false, defaultValue = "1") @Positive int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") @Positive int size)
             throws ServiceException {
-        PageRequestParameters requestParameters = PageRequestParameters.of(page, size);
+        SimplePageRequest requestParameters = SimplePageRequest.of(page, size);
         List<UserDto> userDtoList = userService.findAll(requestParameters);
         return userCollectionAssembler.toCollectionModel(userDtoList, requestParameters);
     }
 
-    @GetMapping("/{id}/orders")
-    public CollectionModel<OrderDto> getUsersOrders(@PathVariable("id") @Positive long userId,
+    @GetMapping("/{userId}/orders")
+    public CollectionModel<OrderDto> getUsersOrders(@PathVariable("userId") @Positive long userId,
                                                     @RequestParam(name = "page", required = false, defaultValue = "1")
                                                     @Positive int page,
                                                     @RequestParam(name = "size", required = false, defaultValue = "10")
                                                     @Positive int size) throws ServiceException {
-        PageRequestParameters pageRequest = PageRequestParameters.of(page, size);
+        SimplePageRequest pageRequest = SimplePageRequest.of(page, size);
         List<OrderDto> orders = orderService.findUserOrders(userId, pageRequest);
         orders.forEach(e -> e.setUserId(userId));
 
@@ -76,6 +77,7 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/orders")
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderDto createUserOrder(@PathVariable("userId") @Positive long userId,
                                     @RequestBody @Valid @NotEmpty List<@Positive Long> certificatesIds)
             throws ServiceException {

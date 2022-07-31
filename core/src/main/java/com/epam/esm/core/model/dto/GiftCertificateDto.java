@@ -3,6 +3,7 @@ package com.epam.esm.core.model.dto;
 import com.epam.esm.core.validation.CreateValidation;
 import com.epam.esm.core.validation.NullOrNotBlank;
 import com.epam.esm.core.validation.UpdateValidation;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.core.Relation;
 
@@ -29,7 +30,9 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     private BigDecimal price;
     @Positive
     private Integer duration;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime createDate;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime lastUpdateDate;
     private Set<@Valid TagDto> tags;
 

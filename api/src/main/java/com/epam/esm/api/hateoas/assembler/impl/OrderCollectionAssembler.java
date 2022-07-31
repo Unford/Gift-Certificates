@@ -4,7 +4,7 @@ import com.epam.esm.api.controller.UserController;
 import com.epam.esm.api.hateoas.assembler.CollectionModelAssembler;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.dto.OrderDto;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.epam.esm.api.hateoas.CustomLinkRelation.*;
-import static com.epam.esm.api.hateoas.CustomLinkRelation.CREATE_ORDER;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -23,7 +22,7 @@ public class OrderCollectionAssembler implements CollectionModelAssembler<OrderD
 
     @Override
     public List<Link> getCollectionLinks(Collection<OrderDto> collection,
-                                         PageRequestParameters pageRequest) throws ServiceException {
+                                         SimplePageRequest pageRequest) throws ServiceException {
         long userId = 0;
         Optional<OrderDto> orderDto = collection.stream().findFirst();
         if (orderDto.isPresent()) {

@@ -8,15 +8,14 @@ import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Tag;
-import com.epam.esm.core.model.dto.request.GiftCertificateRequest;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.CertificatePageRequest;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.service.GiftCertificateService;
-import com.epam.esm.core.util.RequestParser;
+import com.epam.esm.core.util.RequestParameterParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,9 +45,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDto> findAll(PageRequestParameters pageRequestParameters) {
+    public List<GiftCertificateDto> findAll(SimplePageRequest simplePage) {
         List<GiftCertificate> certificates = certificateRepository
-                .findAll(RequestParser.convertToPageable(pageRequestParameters));
+                .findAll(RequestParameterParser.convertToPageable(simplePage));
         return certificates.stream()
                 .map(certificate -> modelMapper.map(certificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());
@@ -88,9 +87,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
 
     @Override
-    public List<GiftCertificateDto> findAllByParameters(GiftCertificateRequest pageRequest) {
-        Specification<GiftCertificate> specification = RequestParser.parseSpecification(pageRequest);
-        return certificateRepository.findAll(specification, RequestParser.convertToPageable(pageRequest))
+    public List<GiftCertificateDto> findAllByParameters(CertificatePageRequest pageRequest) {
+        Specification<GiftCertificate> specification = RequestParameterParser.parseSpecification(pageRequest);
+        return certificateRepository.findAll(specification, RequestParameterParser.convertToPageable(pageRequest))
                 .stream()
                 .map(certificate -> modelMapper.map(certificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());

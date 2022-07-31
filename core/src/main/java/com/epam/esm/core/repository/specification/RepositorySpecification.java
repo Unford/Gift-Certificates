@@ -53,7 +53,7 @@ public class RepositorySpecification<T extends AbstractRepositoryEntity> impleme
                 predicate = criteriaBuilder.greaterThanOrEqualTo(root.get(criteria.getKey()), value);
                 break;
             case IN:
-                predicate = root.get(criteria.getKey()).in(criteria.getValue());
+                predicate = root.get(criteria.getKey()).in((Object[]) criteria.getValue());
                 break;
         }
         return predicate;

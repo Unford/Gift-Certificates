@@ -6,19 +6,20 @@ import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Order;
 import com.epam.esm.core.model.domain.User;
 import com.epam.esm.core.model.dto.OrderDto;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.repository.impl.GiftCertificateRepositoryImpl;
 import com.epam.esm.core.repository.impl.OrderRepositoryImpl;
 import com.epam.esm.core.repository.impl.UserRepositoryImpl;
-import com.epam.esm.core.repository.specification.CustomSpecifications;
 import com.epam.esm.core.service.OrderService;
-import com.epam.esm.core.util.RequestParser;
+import com.epam.esm.core.util.RequestParameterParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.epam.esm.core.repository.specification.CustomSpecifications.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -39,12 +40,11 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<OrderDto> findUserOrders(long userId, PageRequestParameters pageRequestParameters)
+    public List<OrderDto> findUserOrders(long userId, SimplePageRequest simplePage)
             throws ServiceException {
-        userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
-                CustomErrorCode.RESOURCE_NOT_FOUND));
-        return orderRepository.findAll(CustomSpecifications.whereUserId(userId),
-                        RequestParser.convertToPageable(pageRequestParameters))
+        findUserById(userId);
+        return orderRepository.findAll(whereUserId(userId),
+                        RequestParameterParser.convertToPageable(simplePage))
                 .stream()
                 .map(certificate -> modelMapper.map(certificate, OrderDto.class))
                 .collect(Collectors.toList());
@@ -52,17 +52,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto findUserOrderById(long userId, long orderId) throws ServiceException {
-        userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
-                CustomErrorCode.RESOURCE_NOT_FOUND));
-        Order order = orderRepository.findFirstWhere(CustomSpecifications.whereUserIdAndOrderId(userId, orderId))
+        findUserById(userId);
+        Order order = orderRepository.findFirstWhere(whereUserIdAndOrderId(userId, orderId))
                 .orElseThrow(() -> new ServiceException(Long.toString(orderId), CustomErrorCode.RESOURCE_NOT_FOUND));
         return modelMapper.map(order, OrderDto.class);
     }
 
     @Override
     public OrderDto createUserOrder(long userId, List<Long> certificatesIds) throws ServiceException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
-                CustomErrorCode.RESOURCE_NOT_FOUND));
+        User user = findUserById(userId);
         List<GiftCertificate> certificates = new ArrayList<>(certificatesIds.size());
         for (long id : certificatesIds) {
             GiftCertificate certificate = giftCertificateRepository.findById(id)
@@ -75,6 +73,11 @@ public class OrderServiceImpl implements OrderService {
         order.setGiftCertificates(certificates);
         Order newOrder = orderRepository.create(order);
         return modelMapper.map(newOrder, OrderDto.class);
+    }
+
+    private User findUserById(long userId) throws ServiceException {
+        return userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
+                CustomErrorCode.RESOURCE_NOT_FOUND));
     }
 
 

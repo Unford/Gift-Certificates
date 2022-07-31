@@ -4,7 +4,7 @@ import com.epam.esm.api.hateoas.assembler.impl.GiftCertificateCollectionAssemble
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.dto.GiftCertificateDto;
-import com.epam.esm.core.model.dto.request.GiftCertificateRequest;
+import com.epam.esm.core.model.dto.request.CertificatePageRequest;
 import com.epam.esm.core.service.GiftCertificateService;
 import com.epam.esm.core.validation.CreateValidation;
 import com.epam.esm.core.validation.UpdateValidation;
@@ -47,10 +47,10 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public CollectionModel<GiftCertificateDto> getGiftCertificates(@Valid GiftCertificateRequest giftCertificateRequest,
+    public CollectionModel<GiftCertificateDto> getGiftCertificates(@Valid CertificatePageRequest certificatePageRequest,
                                                                    BindingResult result) throws ServiceException {
-        List<GiftCertificateDto> giftCertificates = service.findAllByParameters(giftCertificateRequest);
-        return collectionAssembler.toCollectionModel(giftCertificates, giftCertificateRequest);//todo
+        List<GiftCertificateDto> giftCertificates = service.findAllByParameters(certificatePageRequest);
+        return collectionAssembler.toCollectionModel(giftCertificates, certificatePageRequest);
     }
 
 

@@ -1,19 +1,16 @@
 package com.epam.esm.core.service.impl;
 
-import com.epam.esm.core.model.domain.User;
 import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.Tag;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.service.TagService;
-import com.epam.esm.core.util.RequestParser;
+import com.epam.esm.core.util.RequestParameterParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +38,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDto> findAll(PageRequestParameters pageRequestParameters) {
-        List<Tag> tags = tagRepository.findAll(RequestParser.convertToPageable(pageRequestParameters));
+    public List<TagDto> findAll(SimplePageRequest simplePage) {
+        List<Tag> tags = tagRepository.findAll(RequestParameterParser.convertToPageable(simplePage));
         return tags.stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))
                 .collect(Collectors.toList());

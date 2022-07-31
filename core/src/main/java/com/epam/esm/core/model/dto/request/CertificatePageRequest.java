@@ -7,7 +7,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 
-public class GiftCertificateRequest extends PageRequestParameters {
+public class CertificatePageRequest extends SimplePageRequest {
     @NullOrNotBlank
     @Pattern(regexp = "^((!?in)|(eq)|(lk)):[^:]+")
     @Size(min = 5, max = 255)

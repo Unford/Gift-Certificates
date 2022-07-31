@@ -4,7 +4,7 @@ import com.epam.esm.api.controller.UserController;
 import com.epam.esm.api.hateoas.assembler.CollectionModelAssembler;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.dto.UserDto;
-import com.epam.esm.core.model.dto.request.PageRequestParameters;
+import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import org.springframework.hateoas.Link;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class UserCollectionAssembler implements CollectionModelAssembler<UserDto> {
     @Override
     public List<Link> getCollectionLinks(Collection<UserDto> collection,
-                                         PageRequestParameters pageRequest) throws ServiceException {
+                                         SimplePageRequest pageRequest) throws ServiceException {
         List<Link> links = new ArrayList<>();
         int currentPage = pageRequest.getPage();
         int currentSize = pageRequest.getSize();

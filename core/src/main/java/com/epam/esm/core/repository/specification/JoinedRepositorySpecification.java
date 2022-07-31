@@ -1,8 +1,6 @@
 package com.epam.esm.core.repository.specification;
 
-import com.epam.esm.core.model.domain.*;
-import com.epam.esm.core.model.domain.Order;
-import org.springframework.data.jpa.domain.Specification;
+import com.epam.esm.core.model.domain.AbstractRepositoryEntity;
 
 import javax.persistence.criteria.*;
 import java.util.ArrayList;

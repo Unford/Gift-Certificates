@@ -6,7 +6,6 @@ import org.springframework.hateoas.server.core.Relation;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.Objects;
 
 @Relation(collectionRelation = "users", itemRelation = "user")

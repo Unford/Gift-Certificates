@@ -30,8 +30,7 @@ public class GiftCertificateModelProcessor implements RepresentationModelProcess
                     .updateGiftCertificateById(model.getId(), null))
                     .withRel(UPDATE_BY_ID));
             model.getTags().forEach(tagModelProcessor::process);
-        } catch (ServiceException ignored) {
-        }
+        } catch (ServiceException ignored) {}
         return model;
     }
 }
