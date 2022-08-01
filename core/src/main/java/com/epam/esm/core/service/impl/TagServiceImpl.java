@@ -1,5 +1,6 @@
 package com.epam.esm.core.service.impl;
 
+import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import com.epam.esm.core.exception.CustomErrorCode;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,7 +61,8 @@ public class TagServiceImpl implements TagService {
         Optional<Tag> result = tagRepository.findById(id);
         Tag tag = result.orElseThrow(() -> new ServiceException(Long.toString(id),
                 CustomErrorCode.RESOURCE_NOT_FOUND));
-        if (!tag.getGiftCertificates().isEmpty()) {
+        Set<GiftCertificate> giftCertificateSet = tag.getGiftCertificates();
+        if (giftCertificateSet != null && !giftCertificateSet.isEmpty()) {
             throw new ServiceException(Long.toString(id), CustomErrorCode.CONFLICT_DELETE);
         }
         tagRepository.deleteById(id);

@@ -11,7 +11,6 @@ import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.model.dto.request.CertificatePageRequest;
 import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.service.GiftCertificateService;
-import com.epam.esm.core.util.RequestParameterParser;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.epam.esm.core.util.RequestParameterParser.*;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
@@ -47,7 +48,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDto> findAll(SimplePageRequest simplePage) {
         List<GiftCertificate> certificates = certificateRepository
-                .findAll(RequestParameterParser.convertToPageable(simplePage));
+                .findAll(convertToPageable(simplePage));
         return certificates.stream()
                 .map(certificate -> modelMapper.map(certificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());
@@ -88,8 +89,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> findAllByParameters(CertificatePageRequest pageRequest) {
-        Specification<GiftCertificate> specification = RequestParameterParser.parseSpecification(pageRequest);
-        return certificateRepository.findAll(specification, RequestParameterParser.convertToPageable(pageRequest))
+        Specification<GiftCertificate> specification = parseCertificateSpecification(pageRequest);
+        return certificateRepository.findAll(specification, convertToPageable(pageRequest))
                 .stream()
                 .map(certificate -> modelMapper.map(certificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());

@@ -65,5 +65,25 @@ public class SearchCriteria {
         return sb.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SearchCriteria)) return false;
 
+        SearchCriteria that = (SearchCriteria) o;
+
+        if (isNot != that.isNot) return false;
+        if (key != null ? !key.equals(that.key) : that.key != null) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        return operation == that.operation;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = key != null ? key.hashCode() : 0;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (operation != null ? operation.hashCode() : 0);
+        result = 31 * result + (isNot ? 1 : 0);
+        return result;
+    }
 }

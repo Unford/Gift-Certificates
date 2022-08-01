@@ -17,7 +17,6 @@ public final class RequestParameterParser {
     }
 
     private static final String DELIMITER_REGEX = ",\\s*";
-
     private static final String IN_DELIMITER_REGEX = ";|" + DELIMITER_REGEX;
     private static final String RHS_COLON_DELIMITER = ":";
     private static final String NEGATION_SIGN = "!";
@@ -29,7 +28,20 @@ public final class RequestParameterParser {
         return PageRequest.of(simplePage.getPage(), simplePage.getSize(), sort);
     }
 
-    private static Sort parseSortQuery(String sortQuery) {
+    public static Specification<GiftCertificate> parseCertificateSpecification(CertificatePageRequest pageRequest) {
+        List<SearchCriteria> criteriaList = new ArrayList<>();
+        criteriaList.addAll(parseQueryList(pageRequest.getName(), GiftCertificate_.NAME));
+        criteriaList.addAll(parseQueryList(pageRequest.getDescription(), GiftCertificate_.DESCRIPTION));
+
+        Optional<SearchCriteria> tagCriteria = parseSingleQuery(pageRequest.getTag(), Tag_.NAME);
+
+        Specification<GiftCertificate> fieldsSpecification = new RepositorySpecification<>(criteriaList);
+        Specification<GiftCertificate> tagsSpecification = parseTagsSpecification(tagCriteria.orElse(null));
+
+        return fieldsSpecification.and(tagsSpecification);
+    }
+
+    public static Sort parseSortQuery(String sortQuery) {
         Sort sort = Sort.unsorted();
         if (sortQuery != null && !sortQuery.isEmpty()) {
             List<Sort.Order> orders = new ArrayList<>();
@@ -43,19 +55,6 @@ public final class RequestParameterParser {
             sort = Sort.by(orders);
         }
         return sort;
-    }
-
-    public static Specification<GiftCertificate> parseSpecification(CertificatePageRequest pageRequest) {
-        List<SearchCriteria> criteriaList = new ArrayList<>();
-        criteriaList.addAll(parseQueryList(pageRequest.getName(), GiftCertificate_.NAME));
-        criteriaList.addAll(parseQueryList(pageRequest.getDescription(), GiftCertificate_.DESCRIPTION));
-
-        Optional<SearchCriteria> tagCriteria = parseSingleQuery(pageRequest.getTag(), Tag_.NAME);
-
-        Specification<GiftCertificate> fieldsSpecification = new RepositorySpecification<>(criteriaList);
-        Specification<GiftCertificate> tagsSpecification = parseTagsSpecification(tagCriteria.orElse(null));
-
-        return fieldsSpecification.and(tagsSpecification);
     }
 
     private static List<SearchCriteria> parseQueryList(List<String> queries, String key) {
@@ -81,7 +80,7 @@ public final class RequestParameterParser {
         return specification;
     }
 
-    private static Optional<SearchCriteria> parseSingleQuery(String query, String key) {
+    public static Optional<SearchCriteria> parseSingleQuery(String query, String key) {
         Optional<SearchCriteria> result = Optional.empty();
         if (query != null && !query.isEmpty()) {
             String[] strings = query.split(RHS_COLON_DELIMITER, 2);
