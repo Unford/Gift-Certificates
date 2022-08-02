@@ -4,6 +4,9 @@ package com.epam.esm.core.model.dto.request;
 import javax.validation.constraints.Positive;
 
 
+/**
+ * It's a simple class that holds the page, size, and sort parameters for a page request
+ */
 public class SimplePageRequest {
     @Positive
     private int page = 1;

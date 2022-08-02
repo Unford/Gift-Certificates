@@ -7,6 +7,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.Objects;
+
+/**
+ * It's a DTO class for the Tag entity
+ */
 @Relation(collectionRelation = "tags", itemRelation = "tag")
 public class TagDto extends RepresentationModel<TagDto> {
     @Positive

@@ -9,6 +9,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * It's a DTO class for the Order entity
+ */
 @Relation(collectionRelation = "orders", itemRelation = "order")
 public class OrderDto extends RepresentationModel<OrderDto> {
     @Positive

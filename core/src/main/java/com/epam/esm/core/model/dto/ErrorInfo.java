@@ -1,5 +1,8 @@
 package com.epam.esm.core.model.dto;
 
+/**
+ * It's a simple POJO that contains two properties: code and message
+ */
 public class ErrorInfo {
     private int code;
     private String message;

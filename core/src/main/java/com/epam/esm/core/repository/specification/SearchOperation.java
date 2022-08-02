@@ -3,6 +3,10 @@ package com.epam.esm.core.repository.specification;
 import java.util.Arrays;
 import java.util.Optional;
 
+
+/**
+ * An enum that is used to parse the operation from the query string to specification.
+ */
 public enum SearchOperation {
     GREATER_THAN("gt"),
     LESS_THAN("lt"),
@@ -22,6 +26,12 @@ public enum SearchOperation {
         return operation;
     }
 
+    /**
+     * It takes a string and returns an Optional of SearchOperation
+     *
+     * @param operation The operation to be performed.
+     * @return Optional of search operation that match the operation parameter.
+     */
     public static Optional<SearchOperation> parseOperation(String operation) {
         return Arrays.stream(SearchOperation.values())
                 .filter(searchOperation -> searchOperation.getOperation().equals(operation))

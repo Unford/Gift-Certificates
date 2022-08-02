@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 
 import static com.epam.esm.core.repository.specification.CustomSpecifications.*;
 
+/**
+ * This class is a service that provides methods for working with orders.
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
     private final OrderRepositoryImpl orderRepository;
@@ -75,6 +78,12 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(newOrder, OrderDto.class);
     }
 
+    /**
+     * Find a user by id, or throw a ServiceException if the user is not found.
+     *
+     * @param userId The id of the user to be deleted.
+     * @return A user object
+     */
     private User findUserById(long userId) throws ServiceException {
         return userRepository.findById(userId).orElseThrow(() -> new ServiceException(Long.toString(userId),
                 CustomErrorCode.RESOURCE_NOT_FOUND));

@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a service that provides methods for working with users.
+ */
 @Service
 public class UserServiceImpl implements BaseService<UserDto> {
     private final UserRepositoryImpl userRepository;

@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * GiftCertificate is an entity class that represents a gift certificate
+ */
 @Entity
 @Table(name = "gift_certificates")
 public class GiftCertificate extends AbstractRepositoryEntity {
@@ -167,6 +170,9 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         return sb.toString();
     }
 
+    /**
+     * It's a builder class for the GiftCertificate class
+     */
     public static class GiftCertificateBuilder {
         private long id;
         private String name;

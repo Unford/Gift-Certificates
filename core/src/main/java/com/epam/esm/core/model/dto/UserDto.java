@@ -8,6 +8,9 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.Objects;
 
+/**
+ * It's a DTO class for the User entity
+ */
 @Relation(collectionRelation = "users", itemRelation = "user")
 public class UserDto extends RepresentationModel<UserDto> {
     @Positive

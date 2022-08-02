@@ -6,6 +6,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * It's a base class for all entities that are persisted in the database
+ */
 @MappedSuperclass
 public abstract class AbstractRepositoryEntity {
     @Id

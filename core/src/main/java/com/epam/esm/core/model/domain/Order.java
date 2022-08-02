@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * It's an entity class that represents an order in the system
+ */
 @Entity
 @Table(name = "orders")
 public class Order extends AbstractRepositoryEntity {

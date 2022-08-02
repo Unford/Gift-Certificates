@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * It's a repository for tags objects
+ */
 @Repository
 public class TagRepositoryImpl extends AbstractBaseRepository<Tag> implements TagRepository {
     private static final String FIND_THE_MOST_WIDELY_USED_TAG_QUERY = "SELECT tags.* FROM (" +

@@ -18,6 +18,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * This class is a service that provides methods for working with tags.
+ */
 @Service
 public class TagServiceImpl implements TagService {
     private final TagRepositoryImpl tagRepository;

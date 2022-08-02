@@ -1,6 +1,10 @@
 package com.epam.esm.core.exception;
 
 
+
+/**
+ * It's a custom exception class that extends the Exception class and adds a custom error code
+ */
 public class ServiceException extends Exception {
     private final CustomErrorCode errorCode;
 
@@ -15,6 +19,12 @@ public class ServiceException extends Exception {
         this.errorCode = errorCode;
     }
 
+
+    /**
+     * This function method the error code of the exception
+     *
+     * @return The error code.
+     */
     public CustomErrorCode getErrorCode() {
         return errorCode;
     }

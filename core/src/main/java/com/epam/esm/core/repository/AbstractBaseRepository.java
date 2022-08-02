@@ -118,6 +118,15 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
         entityManager.remove(findById(id).get());
     }
 
+    /**
+     * It takes a Sort object and a CriteriaBuilder and returns a list of Order objects
+     *
+     * @param sort            The sort object that contains the sort properties and directions.
+     * @param criteriaBuilder The CriteriaBuilder is used to construct criteria queries, compound selections, expressions,
+     *                        predicates, orderings.
+     * @param from            The root of the query.
+     * @return A list of orders.
+     */
     private List<Order> extractOrders(Sort sort, CriteriaBuilder criteriaBuilder, Root<T> from) {
         List<Order> orderList = new ArrayList<>();
         sort.get().forEach(order -> orderList.add(order.getDirection() == Sort.Direction.ASC ?

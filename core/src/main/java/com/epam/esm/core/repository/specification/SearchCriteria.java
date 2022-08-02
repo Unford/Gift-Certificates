@@ -1,6 +1,9 @@
 package com.epam.esm.core.repository.specification;
 
 
+/**
+ * It's a class that holds the search criteria for a single field
+ */
 public class SearchCriteria {
     private String key;
     private Object value;

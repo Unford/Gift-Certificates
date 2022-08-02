@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * It's a repository for GiftCertificate entities
+ */
 @Repository
 public class OrderRepositoryImpl extends AbstractBaseRepository<Order> {
     public OrderRepositoryImpl() {

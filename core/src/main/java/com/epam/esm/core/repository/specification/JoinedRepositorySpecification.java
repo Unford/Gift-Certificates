@@ -6,6 +6,9 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * It's a specification that joins a table and then creates a predicate based on the criteria list
+ */
 public class JoinedRepositorySpecification<T extends AbstractRepositoryEntity> extends RepositorySpecification<T> {
     private final String joinTable;
 

@@ -7,6 +7,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
+/**
+ * It's an entity that represents a user of the system
+ */
 @Entity
 @Table(name = "users")
 public class User extends AbstractRepositoryEntity {

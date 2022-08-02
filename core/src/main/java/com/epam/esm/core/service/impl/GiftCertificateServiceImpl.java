@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 
 import static com.epam.esm.core.util.RequestParameterParser.*;
 
+/**
+ * This class is a service that provides methods for working with gift certificates.
+ */
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateRepositoryImpl certificateRepository;
@@ -98,6 +101,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * If the tag exists in the database, add it to the set of tags,
+     * otherwise create a new tag and add it to the set of tags.
+     *
+     * @param giftCertificate the GiftCertificateDto.
+     * @return Set of tags
+     */
     private Set<Tag> prepareGiftCertificateTags(GiftCertificateDto giftCertificate) {
         Set<Tag> tags = new HashSet<>();
         for (TagDto tag : giftCertificate.getTags()) {

@@ -12,6 +12,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.*;
 
+/**
+ * This class parses the request parameters and converts them to a specification
+ */
 public final class RequestParameterParser {
     private RequestParameterParser() {
     }
@@ -23,11 +26,23 @@ public final class RequestParameterParser {
     private static final String MINUS = "-";
     private static final String SORT_PROPERTY_DIRECTION_REGEX = "[+-].+";
 
+    /**
+     * It converts a SimplePageRequest object to a PageRequest object
+     *
+     * @param simplePage The object that contains the page number, page size, and sort parameters.
+     * @return A PageRequest object
+     */
     public static PageRequest convertToPageable(SimplePageRequest simplePage) {
         Sort sort = parseSortQuery(simplePage.getSort());
         return PageRequest.of(simplePage.getPage(), simplePage.getSize(), sort);
     }
 
+    /**
+     * It takes a page request object and returns a specification object that can be used to query the database
+     *
+     * @param pageRequest a request object that contains all the parameters that the user can pass to the API.
+     * @return A Specification object
+     */
     public static Specification<GiftCertificate> parseCertificateSpecification(CertificatePageRequest pageRequest) {
         List<SearchCriteria> criteriaList = new ArrayList<>();
         criteriaList.addAll(parseQueryList(pageRequest.getName(), GiftCertificate_.NAME));
@@ -41,6 +56,13 @@ public final class RequestParameterParser {
         return fieldsSpecification.and(tagsSpecification);
     }
 
+    /**
+     * It takes a string of comma separated values, each of which can be prefixed
+     * with a minus sign to indicate descending order, and returns a Sort object
+     *
+     * @param sortQuery The sort query string.
+     * @return A Sort object
+     */
     public static Sort parseSortQuery(String sortQuery) {
         Sort sort = Sort.unsorted();
         if (sortQuery != null && !sortQuery.isEmpty()) {
@@ -57,6 +79,13 @@ public final class RequestParameterParser {
         return sort;
     }
 
+    /**
+     * It takes a list of strings, and a key, and returns a list of search criteria
+     *
+     * @param queries The list of query parameters that are passed in the request.
+     * @param key The key of the query parameter.
+     * @return A list of SearchCriteria objects.
+     */
     private static List<SearchCriteria> parseQueryList(List<String> queries, String key) {
         List<SearchCriteria> criteriaList = new ArrayList<>();
         if (queries != null && !queries.isEmpty()) {
@@ -80,6 +109,13 @@ public final class RequestParameterParser {
         return specification;
     }
 
+    /**
+     * It takes a query string and a field name, and returns an optional SearchCriteria object
+     *
+     * @param query The query string that we want to parse.
+     * @param key The name of the field to search on.
+     * @return A SearchCriteria object
+     */
     public static Optional<SearchCriteria> parseSingleQuery(String query, String key) {
         Optional<SearchCriteria> result = Optional.empty();
         if (query != null && !query.isEmpty()) {

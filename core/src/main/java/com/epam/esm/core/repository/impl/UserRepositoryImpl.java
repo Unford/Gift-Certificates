@@ -4,6 +4,9 @@ import com.epam.esm.core.repository.AbstractBaseRepository;
 import com.epam.esm.core.model.domain.User;
 import org.springframework.stereotype.Repository;
 
+/**
+ * It's a repository for user objects
+ */
 @Repository
 public class UserRepositoryImpl extends AbstractBaseRepository<User> {
 

@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * It's a DTO class for the GiftCertificate entity
+ */
 @Relation(collectionRelation = "certificates", itemRelation = "certificate")
 public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> {
     @Positive

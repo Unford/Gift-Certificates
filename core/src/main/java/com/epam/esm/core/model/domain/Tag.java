@@ -7,6 +7,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.Set;
 
+/**
+ * It's an entity class that represents a tag
+ */
 @Entity
 @Table(name = "tags")
 public class Tag extends AbstractRepositoryEntity {

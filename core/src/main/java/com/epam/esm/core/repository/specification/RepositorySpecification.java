@@ -7,6 +7,9 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * It takes a list of SearchCriteria objects and creates a JPA Predicate object that can be used to query the database
+ */
 public class RepositorySpecification<T extends AbstractRepositoryEntity> implements Specification<T> {
     private static final String PERCENT_SIGN = "%";
     protected final List<SearchCriteria> criteriaList;
@@ -29,6 +32,14 @@ public class RepositorySpecification<T extends AbstractRepositoryEntity> impleme
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 
+    /**
+     * It creates a predicate based on the search criteria
+     *
+     * @param root The root of the query.
+     * @param criteriaBuilder This is the criteria builder that is used to create the predicate.
+     * @param criteria The criteria object that contains the key, value and operation.
+     * @return A Predicate object.
+     */
     protected Predicate createPredicate(From<?, ?> root, CriteriaBuilder criteriaBuilder, SearchCriteria criteria) {
         Predicate predicate = null;
         String value = criteria.getValue().toString();

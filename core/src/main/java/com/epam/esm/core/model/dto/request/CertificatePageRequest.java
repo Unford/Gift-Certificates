@@ -7,6 +7,9 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 
+/**
+ * It's a page request for certificates
+ */
 public class CertificatePageRequest extends SimplePageRequest {
     @NullOrNotBlank
     @Pattern(regexp = "^((!?in)|(eq)|(lk)):[^:]+")

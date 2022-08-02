@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * It's an aspect that logs method calls and their arguments, and the return value or exception thrown
+ */
 @Aspect
 @Component
 public class Logging {
@@ -18,6 +21,12 @@ public class Logging {
     @Pointcut("execution(* com.epam.esm.core.*.*.*(..))")
     public void executeLogging() {}
 
+    /**
+     * It logs the method name, arguments, return value, and any exceptions that are thrown
+     *
+     * @param joinPoint The join point is the method that is being intercepted.
+     * @return The return value of the method being called.
+     */
     @Around("executeLogging()")
     public Object logMethodCall(ProceedingJoinPoint joinPoint) throws Throwable {
         StringBuilder builder = new StringBuilder("Method: ")
