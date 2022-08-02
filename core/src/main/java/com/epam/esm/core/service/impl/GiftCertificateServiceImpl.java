@@ -1,5 +1,6 @@
 package com.epam.esm.core.service.impl;
 
+import com.epam.esm.core.model.domain.Order;
 import com.epam.esm.core.model.dto.GiftCertificateDto;
 import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.repository.TagRepository;
@@ -80,7 +81,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void deleteById(long id) throws ServiceException {
         GiftCertificate certificate = certificateRepository.findById(id)
                 .orElseThrow(() -> new ServiceException(Long.toString(id), CustomErrorCode.RESOURCE_NOT_FOUND));
-        if (!certificate.getOrders().isEmpty()) {
+        Set<Order> orders = certificate.getOrders();
+        if (orders != null && !orders.isEmpty()) {
             throw new ServiceException(Long.toString(id), CustomErrorCode.CONFLICT_DELETE);
         }
         certificateRepository.deleteById(id);

@@ -39,6 +39,8 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         this.createDate = builder.createDate;
         this.lastUpdateDate = builder.lastUpdateDate;
         this.tags = builder.tags;
+        this.orders = builder.orders;
+
     }
 
 
@@ -174,6 +176,8 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         private LocalDateTime createDate;
         private LocalDateTime lastUpdateDate;
         private Set<Tag> tags = new HashSet<>();
+        private Set<Order> orders = new HashSet<>();
+
 
         public GiftCertificateBuilder id(long id) {
             this.id = id;
@@ -216,6 +220,11 @@ public class GiftCertificate extends AbstractRepositoryEntity {
 
         public GiftCertificateBuilder tags(Set<Tag> tags) {
             this.tags = tags;
+            return this;
+        }
+
+        public GiftCertificateBuilder orders(Set<Order> orders) {
+            this.orders = orders;
             return this;
         }
 

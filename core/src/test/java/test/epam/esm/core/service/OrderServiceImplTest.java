@@ -5,31 +5,28 @@ import com.epam.esm.core.exception.CustomErrorCode;
 import com.epam.esm.core.exception.ServiceException;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.Order;
-import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.model.domain.User;
 import com.epam.esm.core.model.dto.OrderDto;
-import com.epam.esm.core.model.dto.TagDto;
 import com.epam.esm.core.model.dto.request.SimplePageRequest;
 import com.epam.esm.core.repository.impl.GiftCertificateRepositoryImpl;
 import com.epam.esm.core.repository.impl.OrderRepositoryImpl;
-import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import com.epam.esm.core.repository.impl.UserRepositoryImpl;
-import com.epam.esm.core.service.OrderService;
 import com.epam.esm.core.service.impl.OrderServiceImpl;
-import com.epam.esm.core.service.impl.TagServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 
 class OrderServiceImplTest {
@@ -65,10 +62,12 @@ class OrderServiceImplTest {
             order.setId(i);
             order.setPurchaseDate(now);
             order.setUser(user);
+            order.setCost(BigDecimal.valueOf(i));
             OrderDto orderDto = new OrderDto();
             orderDto.setId(i);
             orderDto.setPurchaseDate(now);
             orderDto.setUserId(i);
+            orderDto.setCost(order.getCost());
             expectedOrderDtoList.add(orderDto);
             expectedOrderList.add(order);
         }
