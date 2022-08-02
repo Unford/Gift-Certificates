@@ -63,7 +63,7 @@ class TagServiceImplTest {
     }
 
     @Test
-    void givenAlreadyExistTag_whenCreate_thenAlreadyExist() throws ServiceException {
+    void givenTag_whenCreate_thenAlreadyExist() throws ServiceException {
         Tag expected = expectedTagList.get(0);
         TagDto newTag = new TagDto(null, expected.getName());
 
