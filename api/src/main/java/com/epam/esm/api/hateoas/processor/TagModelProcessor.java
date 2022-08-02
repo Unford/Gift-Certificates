@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 import static com.epam.esm.api.hateoas.CustomLinkRelation.DELETE_BY_ID;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+/**
+ * This class is a RepresentationModelProcessor that will be called by Spring when it is building a
+ * representation model for a TagDto
+ */
 @Component
 public class TagModelProcessor implements RepresentationModelProcessor<TagDto> {
     @Override

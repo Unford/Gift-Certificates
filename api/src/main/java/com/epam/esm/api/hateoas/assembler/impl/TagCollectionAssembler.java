@@ -16,6 +16,9 @@ import static com.epam.esm.api.hateoas.CustomLinkRelation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * This class is responsible for converting a list of `TagDto` objects into a `CollectionModel` object
+ */
 @Component
 public class TagCollectionAssembler implements CollectionModelAssembler<TagDto> {
 

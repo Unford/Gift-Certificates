@@ -17,6 +17,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+/**
+ * It's a controller that provides operations on tags
+ */
 @RestController
 @RequestMapping("/tags")
 @Validated
@@ -31,11 +34,26 @@ public class TagController {
         this.collectionAssembler = collectionAssembler;
     }
 
+    /**
+     * > This method returns a TagDto object that is found by the id parameter
+     *
+     * @param id the id of the tag to be retrieved
+     * @throws ServiceException if tag not found
+     * @return  TagDto object
+     */
     @GetMapping("/{id}")
     public TagDto getTagById(@PathVariable("id") @Positive long id) throws ServiceException {
         return service.findById(id);
     }
 
+    /**
+     * This method returns a collection of TagDto objects, which are the result of a call to the service layer, which
+     * in turn calls the repository layer
+     *
+     * @param page The page number to return.
+     * @param size The number of items to return per page.
+     * @return A collection of TagDto objects.
+     */
     @GetMapping
     public CollectionModel<TagDto> getTags(
             @RequestParam(name = "page", required = false, defaultValue = "1") @Positive int page,
@@ -46,17 +64,35 @@ public class TagController {
         return collectionAssembler.toCollectionModel(tags, simplePage);
     }
 
+    /**
+     * This method returns the most widely used tag.
+     *
+     * @return TagDto
+     */
     @GetMapping(value = "/the-most-widely")
     public TagDto getTheMostWidelyUsedTag() throws ServiceException {
         return service.findTheMostWidelyUsedTag();
     }
 
+    /**
+     * The method creates a new tag and returns it
+     *
+     * @param tagDto The tag object that will be created.
+     * @return TagDto object
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TagDto createTag(@RequestBody @Valid TagDto tag) throws ServiceException {
-        return service.create(tag);
+    public TagDto createTag(@RequestBody @Valid TagDto tagDto) throws ServiceException {
+        return service.create(tagDto);
     }
 
+    /**
+     * It deletes a tag by id.
+     *
+     * @param id the id of the tag to be deleted
+     * @throws ServiceException if tag not found
+     * @return ResponseEntity<TagDto> no content
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<TagDto> deleteTagById(@PathVariable("id") @Positive long id) throws ServiceException {

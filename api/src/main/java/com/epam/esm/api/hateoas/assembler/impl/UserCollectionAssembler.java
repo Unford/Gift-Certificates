@@ -17,6 +17,9 @@ import static com.epam.esm.api.hateoas.CustomLinkRelation.PREVIOUS_PAGE;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * This class is responsible for converting a list of `UserDto` objects into a `CollectionModel` of `UserDto` objects
+ */
 @Component
 public class UserCollectionAssembler implements CollectionModelAssembler<UserDto> {
     @Override

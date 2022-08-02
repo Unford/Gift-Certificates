@@ -20,6 +20,9 @@ import static com.epam.esm.api.hateoas.CustomLinkRelation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * This class is responsible for converting a list of GiftCertificateDto objects into a CollectionModel object
+ */
 @Component
 public class GiftCertificateCollectionAssembler implements CollectionModelAssembler<GiftCertificateDto> {
     private static final String SIZE_PARAMETER = "size";

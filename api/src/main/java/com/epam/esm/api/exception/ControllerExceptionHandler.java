@@ -27,6 +27,9 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * It handles all exceptions thrown by the application and returns a response with a proper error code and message
+ */
 @RestControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String CONSTRAINT_VIOLATION_MESSAGE_PATTERN = "[%s]:'%s' %s";
@@ -86,6 +89,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
+    /**
+     * The method takes a ServiceException object as input, and returns a ResponseEntity object with an ErrorInfo
+     * object as the body
+     *
+     * @param ex The exception object
+     * @return A ResponseEntity with an ErrorInfo object and an HttpStatus.
+     */
     @ExceptionHandler(ServiceException.class)
     public ResponseEntity<ErrorInfo> handleServiceException(ServiceException ex) {
         CustomErrorCode errorCode = ex.getErrorCode();
@@ -95,6 +105,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
+    /**
+     * It takes a MethodArgumentTypeMismatchException, gets the parameter name and the parameter type, and returns a
+     * ResponseEntity with an ErrorInfo object containing the error code and message
+     *
+     * @param ex The exception object
+     * @return A ResponseEntity with an ErrorInfo object and an HttpStatus.
+     */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorInfo> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         CustomErrorCode errorCode = CustomErrorCode.TYPE_MISMATCH;
@@ -107,6 +124,14 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
+    /**
+     * It takes a ConstraintViolationException, extracts the field name, invalid value, and error message from each
+     * ConstraintViolation, and returns a ResponseEntity with an ErrorInfo object containing the error code and
+     * a message containing all the ConstraintViolations
+     *
+     * @param ex The exception object
+     * @return A ResponseEntity with an ErrorInfo object and a HttpStatus.
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorInfo> handleConstraintViolationException(ConstraintViolationException ex) {
         CustomErrorCode errorCode = CustomErrorCode.CONSTRAINT_VIOLATION;
@@ -124,6 +149,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorInfo, errorCode.getHttpStatus());
     }
 
+    /**
+     * It takes an exception, gets the locale, gets the message from the message source, creates an error info object,
+     * and returns a response entity with the error info and the http status
+     *
+     * @param ex The exception object
+     * @return A ResponseEntity object.
+     */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex) {
         CustomErrorCode errorCode = CustomErrorCode.INTERNAL_EXCEPTION;

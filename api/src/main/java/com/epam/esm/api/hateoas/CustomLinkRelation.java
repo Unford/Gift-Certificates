@@ -1,5 +1,8 @@
 package com.epam.esm.api.hateoas;
 
+/**
+ * It's a collection of constants that represent the names of the custom link relations
+ */
 public final class CustomLinkRelation {
 
     private CustomLinkRelation() {

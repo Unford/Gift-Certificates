@@ -10,6 +10,10 @@ import static com.epam.esm.api.hateoas.CustomLinkRelation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+/**
+ * This class is a RepresentationModelProcessor that will be called by Spring when it is building a
+ * representation model for a OrderDto
+ */
 @Component
 public class OrderModelProcessor implements RepresentationModelProcessor<OrderDto> {
     @Override

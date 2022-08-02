@@ -18,7 +18,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.util.List;
-
+/**
+ * It's a controller that provides operations on users and their orders
+ */
 @RestController
 @RequestMapping("/users")
 @Validated
@@ -40,11 +42,25 @@ public class UserController {
         this.orderCollectionAssembler = orderCollectionAssembler;
     }
 
+    /**
+     * This method returns a user by id
+     *
+     * @param id the id of the user to be retrieved
+     * @throws ServiceException if user not found
+     * @return UserDto
+     */
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable("id") @Positive long id) throws ServiceException {
         return userService.findById(id);
     }
 
+    /**
+     * This method returns a collection of users, with pagination capability
+     *
+     * @param page The page number to return.
+     * @param size The number of items to return per page.
+     * @return A collection of userDto
+     */
     @GetMapping
     public CollectionModel<UserDto> getUsers(
             @RequestParam(name = "page", required = false, defaultValue = "1") @Positive int page,
@@ -55,6 +71,14 @@ public class UserController {
         return userCollectionAssembler.toCollectionModel(userDtoList, requestParameters);
     }
 
+    /**
+     * This function returns a collection of orders for a given user
+     *
+     * @param userId the id of the user whose orders we want to retrieve
+     * @param page the page number, starting from 1.
+     * @param size The number of items to be returned in a page.
+     * @return CollectionModel<OrderDto> user orders
+     */
     @GetMapping("/{userId}/orders")
     public CollectionModel<OrderDto> getUsersOrders(@PathVariable("userId") @Positive long userId,
                                                     @RequestParam(name = "page", required = false, defaultValue = "1")
@@ -68,6 +92,14 @@ public class UserController {
         return orderCollectionAssembler.toCollectionModel(orders, pageRequest);
     }
 
+    /**
+     * This method returns an order by id for a given user
+     *
+     * @param userId The user's id.
+     * @param orderId The order ID.
+     * @throws ServiceException if user or order not found
+     * @return OrderDto order
+     */
     @GetMapping("/{userId}/orders/{orderId}")
     public OrderDto getUsersOrderById(@PathVariable("userId") @Positive long userId,
                                       @PathVariable("orderId") @Positive long orderId) throws ServiceException {
@@ -76,6 +108,13 @@ public class UserController {
         return orderDto;
     }
 
+    /**
+     * It creates a new order for a user with the given userId, and returns the created order
+     *
+     * @param userId the id of the user who is making the order
+     * @param certificatesIds a list of certificate IDs that the user wants to buy.
+     * @return OrderDto created order
+     */
     @PostMapping("/{userId}/orders")
     @ResponseStatus(HttpStatus.CREATED)
     public OrderDto createUserOrder(@PathVariable("userId") @Positive long userId,
