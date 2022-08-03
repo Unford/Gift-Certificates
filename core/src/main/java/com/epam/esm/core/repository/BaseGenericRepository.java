@@ -72,9 +72,9 @@ public interface BaseGenericRepository<T extends AbstractRepositoryEntity> {
     Optional<T> findFirstWhere(Specification<T> specification);
 
     /**
-     * Find a user by name, and return it if found, otherwise return null.
+     * Find an entity by name, and return it if found, otherwise return null.
      *
-     * @param name The name of the method.
+     * @param name The name of the entity.
      * @return Optional<T>
      */
     Optional<T> findByName(String name);

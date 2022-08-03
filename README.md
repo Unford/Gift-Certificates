@@ -19,4 +19,4 @@ The system should be extended to expose the following REST APIs:
 8. - [x] Pagination should be implemented for all GET endpoints. Please, create a flexible and non-erroneous solution. Handle
      all exceptional cases.
 9. - [x] Support HATEOAS on REST endpoints.
-10. Test app
+10. - [x] Test app

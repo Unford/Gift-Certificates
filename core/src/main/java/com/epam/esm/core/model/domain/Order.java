@@ -23,10 +23,30 @@ public class Order extends AbstractRepositoryEntity {
             inverseJoinColumns = @JoinColumn(name = "gift_certificate_id"))
     private List<GiftCertificate> giftCertificates;
 
+    public Order() {
+    }
+
+    public Order(Long id, BigDecimal cost, LocalDateTime purchaseDate,
+                 User user, List<GiftCertificate> giftCertificates) {
+        super(id);
+        this.cost = cost;
+        this.purchaseDate = purchaseDate;
+        this.user = user;
+        this.giftCertificates = giftCertificates;
+    }
+
+    public Order(BigDecimal cost, LocalDateTime purchaseDate, User user,
+                 List<GiftCertificate> giftCertificates) {
+        this(null, cost, purchaseDate, user, giftCertificates);
+    }
 
     @PrePersist
     public void onPrePersist() {
         purchaseDate = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onPostPersist() {
         cost = giftCertificates.stream().map(GiftCertificate::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -86,8 +106,8 @@ public class Order extends AbstractRepositoryEntity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Order{");
-        sb.append(", id=").append(id);
-        sb.append("cost=").append(cost);
+        sb.append("id=").append(id);
+        sb.append(", cost=").append(cost);
         sb.append(", purchaseDate=").append(purchaseDate);
         sb.append('}');
         return sb.toString();

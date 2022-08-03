@@ -18,7 +18,7 @@ public class TagRepositoryImpl extends AbstractBaseRepository<Tag> implements Ta
             "GROUP BY users.id " +
             "HAVING SUM(orders.cost) = (" +
                 "SELECT MAX(sumOrders.fullCost) FROM (" +
-                    "SELECT users.id, Sum(orders.cost) AS fullCost FROM gift_service.users " +
+                    "SELECT users.id, Sum(orders.cost) AS fullCost FROM users " +
                     "JOIN orders ON (users.id=orders.user_id) " +
                     "GROUP BY users.id) AS sumOrders)" +
                 ") AS u " +

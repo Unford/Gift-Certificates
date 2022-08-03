@@ -21,6 +21,21 @@ public class User extends AbstractRepositoryEntity {
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
 
+    public User() {
+    }
+
+    public User(Long id, String name, String login, String password, Set<Order> orders) {
+        super(id);
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.orders = orders;
+    }
+
+    public User(String name, String login, String password, Set<Order> orders) {
+        this(null, name, login, password, orders);
+    }
+
     public String getName() {
         return name;
     }

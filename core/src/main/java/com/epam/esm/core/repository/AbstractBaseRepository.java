@@ -76,8 +76,8 @@ public abstract class AbstractBaseRepository<T extends AbstractRepositoryEntity>
         CriteriaQuery<Long> select = criteriaQuery.select(criteriaBuilder.count(from.get(AbstractRepositoryEntity_.ID)));
 
         Predicate predicate = specification.toPredicate(from, criteriaQuery, criteriaBuilder);
-        if (predicate != null && !predicate.getExpressions().isEmpty()) {
-            select.where(predicate).groupBy(from.get(AbstractRepositoryEntity_.ID));
+        if (predicate != null) {
+            select.where(predicate);
         }
         Long count = entityManager.createQuery(select).getSingleResult();
         return count;

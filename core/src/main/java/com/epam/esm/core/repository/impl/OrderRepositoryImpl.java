@@ -3,6 +3,7 @@ package com.epam.esm.core.repository.impl;
 import com.epam.esm.core.repository.AbstractBaseRepository;
 import com.epam.esm.core.model.domain.Order;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -13,6 +14,12 @@ import java.util.Optional;
 public class OrderRepositoryImpl extends AbstractBaseRepository<Order> {
     public OrderRepositoryImpl() {
         super(Order.class);
+    }
+
+    @Override
+    @Transactional
+    public Order create(Order entity) {
+        return entityManager.merge(entity);
     }
 
     @Override
