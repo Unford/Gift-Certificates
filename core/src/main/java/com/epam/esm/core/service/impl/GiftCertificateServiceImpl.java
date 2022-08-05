@@ -71,11 +71,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificate giftCertificate = certificateRepository.findById(entity.getId())
                 .orElseThrow(() -> new ServiceException(Long.toString(entity.getId()),
                         CustomErrorCode.RESOURCE_NOT_FOUND));
-        modelMapper.map(entity, giftCertificate);
-        if (entity.getTags() != null) {
-            Set<Tag> tags = prepareGiftCertificateTags(entity);
-            giftCertificate.setTags(tags);
-        }
+        setAllNotNullFields(entity, giftCertificate);
         GiftCertificate updatedGiftCertificate = certificateRepository.update(giftCertificate);
         return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
     }
@@ -99,6 +95,31 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .stream()
                 .map(certificate -> modelMapper.map(certificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * It takes a DTO and a GiftCertificate entity, and sets all the fields of the entity that are not null in the DTO
+     *
+     * @param source the object from which the data is taken
+     * @param destination the object to which the values will be copied
+     */
+    private void setAllNotNullFields(GiftCertificateDto source, GiftCertificate destination) {
+        if (source.getName() != null) {
+            destination.setName(source.getName());
+        }
+        if (source.getDescription() != null) {
+            destination.setDescription(source.getDescription());
+        }
+        if (source.getDuration() != null) {
+            destination.setDuration(source.getDuration());
+        }
+        if (source.getPrice() != null) {
+            destination.setPrice(source.getPrice());
+        }
+        if (source.getTags() != null) {
+            Set<Tag> tags = prepareGiftCertificateTags(source);
+            destination.setTags(tags);
+        }
     }
 
     /**

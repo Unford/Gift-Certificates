@@ -3,7 +3,9 @@ package test.epam.esm.core.repository;
 import com.epam.esm.core.config.CoreApplication;
 import com.epam.esm.core.model.domain.GiftCertificate;
 import com.epam.esm.core.model.domain.GiftCertificate_;
+import com.epam.esm.core.model.domain.Tag;
 import com.epam.esm.core.repository.impl.GiftCertificateRepositoryImpl;
+import com.epam.esm.core.repository.impl.TagRepositoryImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,9 +20,11 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,8 +35,11 @@ class GiftCertificateRepositoryImplTest {
     @Autowired
     private GiftCertificateRepositoryImpl certificateRepository;
 
+    @Autowired
+    private TagRepositoryImpl tagRepository;
+
     @Test
-    void givenNewCertificate_whenCreate_thenReturn() {
+    void givenNewCertificateWithoutTags_whenCreate_thenReturn() {
         long expectedSize = certificateRepository.countAllWhere(Specification.where(null)) + 1;
         int expectedDuration = 11;
         BigDecimal expectedPrice = BigDecimal.valueOf(122);
@@ -60,10 +67,78 @@ class GiftCertificateRepositoryImplTest {
     }
 
     @Test
-    void givenCertificate_whenUpdate_thenUpdated() {
+    @Transactional
+    void givenNewCertificateWithExistingTags_whenCreate_thenReturn() {
+        long expectedSize = certificateRepository.countAllWhere(Specification.where(null)) + 1;
+        int expectedDuration = 11;
+        BigDecimal expectedPrice = BigDecimal.valueOf(122);
+        String expectedDescription = "new description 11";
+        String expectedName = "new name 11";
+        Set<Tag> expectedTags = new HashSet<>(tagRepository.findAll(PageRequest.of(2, 2)));
+        GiftCertificate newCertificate = new GiftCertificate.GiftCertificateBuilder()
+                .duration(expectedDuration)
+                .price(expectedPrice)
+                .description(expectedDescription)
+                .name(expectedName)
+                .tags(expectedTags)
+                .build();
+
+        GiftCertificate actual = certificateRepository.create(newCertificate);
+        long actualSize = certificateRepository.countAllWhere(Specification.where(null));
+
+        assertNotNull(actual.getId());
+        assertNotNull(actual.getCreateDate());
+        assertNotNull(actual.getLastUpdateDate());
+        Assertions.assertThat(actual).extracting(GiftCertificate::getDuration,
+                        GiftCertificate::getPrice, GiftCertificate::getDescription,
+                        GiftCertificate::getName)
+                .containsExactly(expectedDuration, expectedPrice, expectedDescription, expectedName);
+        Assertions.assertThat(actual.getTags()).containsExactlyElementsOf(expectedTags);
+        assertEquals(expectedSize, actualSize);
+    }
+
+    @Test
+    @Transactional
+    void givenNewCertificateWithExistingTagsAndNewTag_whenCreate_thenReturn() {
+        long expectedSize = certificateRepository.countAllWhere(Specification.where(null)) + 1;
+        int expectedDuration = 11;
+        BigDecimal expectedPrice = BigDecimal.valueOf(122);
+        String expectedDescription = "new description 11";
+        String expectedName = "new name 11";
+        Set<Tag> expectedTags = new HashSet<>(tagRepository.findAll(PageRequest.of(2, 2)));
+        expectedTags.add(new Tag("new new new tag"));
+        List<String> expectedTagNames = expectedTags.stream().map(Tag::getName).collect(Collectors.toList());
+
+        GiftCertificate newCertificate = new GiftCertificate.GiftCertificateBuilder()
+                .duration(expectedDuration)
+                .price(expectedPrice)
+                .description(expectedDescription)
+                .name(expectedName)
+                .tags(expectedTags)
+                .build();
+
+        GiftCertificate actual = certificateRepository.create(newCertificate);
+        long actualSize = certificateRepository.countAllWhere(Specification.where(null));
+
+        assertNotNull(actual.getId());
+        assertNotNull(actual.getCreateDate());
+        assertNotNull(actual.getLastUpdateDate());
+        Assertions.assertThat(actual).extracting(GiftCertificate::getDuration,
+                        GiftCertificate::getPrice, GiftCertificate::getDescription,
+                        GiftCertificate::getName)
+                .containsExactly(expectedDuration, expectedPrice, expectedDescription, expectedName);
+        Assertions.assertThat(actual.getTags()).extracting(Tag::getName)
+                .containsExactlyInAnyOrderElementsOf(expectedTagNames);
+        Assertions.assertThat(actual.getTags())
+                .extracting(Tag::getId).doesNotContainNull();
+        assertEquals(expectedSize, actualSize);
+    }
+
+    @Test
+    @Transactional
+    void givenCertificateWithoutTags_whenUpdate_thenUpdated() {
         GiftCertificate updatedCertificate = certificateRepository.findById(1).get();
 
-        LocalDateTime unexpectedLastUpdateDate = updatedCertificate.getLastUpdateDate();
         int expectedDuration = 11;
         BigDecimal expectedPrice = BigDecimal.valueOf(122);
         String expectedDescription = "update description 22";
@@ -77,13 +152,71 @@ class GiftCertificateRepositoryImplTest {
         GiftCertificate actual = certificateRepository.update(updatedCertificate);
 
         assertEquals(updatedCertificate.getId(), actual.getId());
-        assertEquals(updatedCertificate.getCreateDate() ,actual.getCreateDate());
-        assertNotEquals(unexpectedLastUpdateDate, actual.getLastUpdateDate());
+        assertEquals(updatedCertificate.getCreateDate(), actual.getCreateDate());
         Assertions.assertThat(actual).extracting(GiftCertificate::getDuration,
                         GiftCertificate::getPrice, GiftCertificate::getDescription,
                         GiftCertificate::getName)
                 .containsExactly(expectedDuration, expectedPrice, expectedDescription, expectedName);
 
+    }
+
+    @Test
+    @Transactional
+    void givenCertificate_whenUpdateTagsToEmpty_thenUpdated() {
+        GiftCertificate updatedCertificate = certificateRepository.findById(2).get();
+
+        int expectedDuration = 11;
+        BigDecimal expectedPrice = BigDecimal.valueOf(122);
+        String expectedDescription = "update description 22";
+        String expectedName = "update name 22";
+
+        updatedCertificate.setDuration(11);
+        updatedCertificate.setPrice(expectedPrice);
+        updatedCertificate.setDescription(expectedDescription);
+        updatedCertificate.setName(expectedName);
+        updatedCertificate.setTags(null);
+
+        GiftCertificate actual = certificateRepository.update(updatedCertificate);
+
+        assertEquals(updatedCertificate.getId(), actual.getId());
+        assertEquals(updatedCertificate.getCreateDate(), actual.getCreateDate());
+
+        Assertions.assertThat(actual.getTags()).isNullOrEmpty();
+        Assertions.assertThat(actual).extracting(GiftCertificate::getDuration,
+                        GiftCertificate::getPrice, GiftCertificate::getDescription,
+                        GiftCertificate::getName)
+                .containsExactly(expectedDuration, expectedPrice, expectedDescription, expectedName);
+
+    }
+
+    @Test
+    @Transactional
+    void givenCertificate_whenUpdateExistingTags_thenUpdated() {
+        GiftCertificate updatedCertificate = certificateRepository.findById(1).get();
+        Set<Tag> expectedTags = new HashSet<>(tagRepository.findAll(PageRequest.of(2, 2)));
+        updatedCertificate.setTags(expectedTags);
+
+        GiftCertificate actual = certificateRepository.update(updatedCertificate);
+
+        assertEquals(updatedCertificate.getId(), actual.getId());
+        assertEquals(updatedCertificate.getCreateDate(), actual.getCreateDate());
+
+        Assertions.assertThat(actual.getTags()).containsExactlyElementsOf(expectedTags);
+    }
+
+    @Test
+    @Transactional
+    void givenCertificate_whenUpdateExistingTagsAndNewTag_thenUpdated() {
+        GiftCertificate updatedCertificate = certificateRepository.findById(1).get();
+        Set<Tag> expectedTags = new HashSet<>(tagRepository.findAll(PageRequest.of(2, 2)));
+        expectedTags.add(new Tag("Super new tag"));
+        updatedCertificate.setTags(expectedTags);
+
+        GiftCertificate actual = certificateRepository.update(updatedCertificate);
+
+        assertEquals(updatedCertificate.getId(), actual.getId());
+        assertEquals(updatedCertificate.getCreateDate(), actual.getCreateDate());
+        Assertions.assertThat(actual.getTags()).containsExactlyInAnyOrderElementsOf(expectedTags);
     }
 
     @Test

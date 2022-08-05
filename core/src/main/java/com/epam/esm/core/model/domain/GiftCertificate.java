@@ -23,8 +23,7 @@ public class GiftCertificate extends AbstractRepositoryEntity {
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "gift_certificate_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
     @ManyToMany(mappedBy = "giftCertificates")
@@ -137,9 +136,7 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         if (price != null ? !price.equals(that.price) : that.price != null) return false;
         if (duration != null ? !duration.equals(that.duration) : that.duration != null) return false;
         if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
-        if (lastUpdateDate != null ? !lastUpdateDate.equals(that.lastUpdateDate) : that.lastUpdateDate != null)
-            return false;
-        return tags != null ? tags.equals(that.tags) : that.tags == null;
+        return lastUpdateDate != null ? lastUpdateDate.equals(that.lastUpdateDate) : that.lastUpdateDate == null;
     }
 
     @Override
@@ -151,7 +148,6 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         result = 31 * result + (duration != null ? duration.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (lastUpdateDate != null ? lastUpdateDate.hashCode() : 0);
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
         return result;
     }
 
@@ -165,7 +161,6 @@ public class GiftCertificate extends AbstractRepositoryEntity {
         sb.append(", duration=").append(duration);
         sb.append(", createDate=").append(createDate);
         sb.append(", lastUpdateDate=").append(lastUpdateDate);
-        sb.append(", tags=").append(tags);
         sb.append('}');
         return sb.toString();
     }
